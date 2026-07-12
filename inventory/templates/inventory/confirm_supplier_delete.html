@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Delete Supplier</h1>
+
+<div style="
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+max-width:600px;
+">
+
+<p>
+
+Are you sure you want to delete:
+
+</p>
+
+<h3>
+
+{{ supplier.name }}
+
+</h3>
+
+<p style="color:#dc3545;">
+
+This action cannot be undone.
+
+</p>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        style="
+        background:#dc3545;
+        color:white;
+        "
+    >
+        Delete Supplier
+    </button>
+
+    <a href="/dashboard/suppliers/"
+       class="reset-btn">
+
+        Cancel
+
+    </a>
+
+</form>
+
+</div>
+
+{% endblock %}

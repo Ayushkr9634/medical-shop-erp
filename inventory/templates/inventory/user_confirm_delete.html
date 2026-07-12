@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Delete User</h1>
+
+<p>
+
+Are you sure you want to delete:
+
+<strong>
+{{ user_obj.username }}
+</strong>
+
+?
+
+</p>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        style="
+        background:red;
+        color:white;
+        padding:10px 20px;
+        border:none;
+        border-radius:5px;
+        "
+    >
+        Delete User
+    </button>
+
+</form>
+
+<br>
+
+<a href="{% url 'user_list' %}">
+    Cancel
+</a>
+
+{% endblock %}

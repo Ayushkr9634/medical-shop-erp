@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin-bottom:15px;">
+
+
+<a href="javascript:history.back()"
+   style="
+   background:#6c757d;
+   color:white;
+   padding:8px 15px;
+   text-decoration:none;
+   border-radius:5px;
+   display:inline-block;
+   ">
+    ← Back
+</a>
+
+
+</div>
+
+<div class="page-header">
+
+
+<h1>Sales</h1>
+
+<div class="header-buttons">
+
+    <a href="/dashboard/sales/add/"
+       class="add-btn">
+        + Add Sale
+    </a>
+
+    <a href="/dashboard/sale-items/add/"
+       class="add-btn">
+        + Add Item
+    </a>
+
+</div>
+
+
+</div>
+
+<div class="toolbar">
+
+<form method="GET"
+      class="search-filter-form">
+
+
+<input
+    class="search-box"
+    type="text"
+    name="q"
+    value="{{ request.GET.q }}"
+    placeholder="Search invoice or customer..."
+>
+
+<button type="submit">
+    Search
+</button>
+<button
+type="button"
+onclick="toggleFilter()"
+
+>
+
+
+Filter
+
+
+</button>
+
+</form>
+
+
+
+</div>
+
+<div id="filterPanel"
+     style="
+     display:none;
+     background:white;
+     padding:20px;
+     border-radius:10px;
+     margin-bottom:20px;
+     box-shadow:0 2px 10px rgba(0,0,0,.1);
+">
+
+<form method="GET">
+
+<h3>
+    Filter Sales
+</h3>
+
+<div class="filter-grid">
+
+
+<div>
+
+    <label>
+        Customer Name
+    </label>
+
+    <input
+        type="text"
+        name="customer_name"
+        value="{{ request.GET.customer_name }}"
+    >
+
+</div>
+
+<div>
+
+    <label>
+        Amount From
+    </label>
+
+    <input
+        type="number"
+        name="amount_min"
+        value="{{ request.GET.amount_min }}"
+    >
+
+</div>
+
+<div>
+
+    <label>
+        Amount To
+    </label>
+
+    <input
+        type="number"
+        name="amount_max"
+        value="{{ request.GET.amount_max }}"
+    >
+
+</div>
+
+<div>
+
+    <label>
+        Date From
+    </label>
+
+    <input
+        type="date"
+        name="date_from"
+        value="{{ request.GET.date_from }}"
+    >
+
+</div>
+
+<div>
+
+    <label>
+        Date To
+    </label>
+
+    <input
+        type="date"
+        name="date_to"
+        value="{{ request.GET.date_to }}"
+    >
+
+</div>
+
+
+</div>
+
+<br>
+
+<button type="submit">
+    Apply Filter
+</button>
+
+<a href="{% url 'sale_list' %}"
+class="reset-btn">
+Reset </a>
+
+</form>
+
+</div>
+
+<table>
+
+<tr>
+
+
+<th>Invoice</th>
+
+<th>Customer</th>
+<th>Mobile</th>
+
+<th>Date</th>
+
+<th>Total Amount</th>
+
+<th>Actions</th>
+
+
+</tr>
+
+{% for sale in sales %}
+
+<tr>
+
+
+<td>
+
+    <a href="{% url 'sale_detail' sale.id %}">
+        {{ sale.invoice_number }}
+    </a>
+
+</td>
+
+<td>
+    {{ sale.customer_name }}
+</td>
+
+<td>
+    {{ sale.customer_mobile }}
+</td>
+
+<td>{{ sale.sale_date }}</td>
+
+<td>
+
+    <span style="
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:5px 10px;
+    border-radius:20px;
+    font-weight:bold;
+    ">
+        ₹ {{ sale.total_amount }}
+    </span>
+
+</td>
+
+<td>
+
+    <a class="action-btn"
+       href="{% url 'sale_detail' sale.id %}">
+        View
+    </a>
+
+    <a class="delete-btn"
+       href="{% url 'sale_delete' sale.id %}">
+        Delete
+    </a>
+
+</td>
+
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+
+<td colspan="5">
+
+    No sales found
+
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<div class="pagination">
+
+{% if sales.has_previous %}
+
+<a href="?page=1">
+« First
+</a>
+
+<a href="?page={{ sales.previous_page_number }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span class="pagination-info">
+
+Page {{ sales.number }}
+
+of
+
+{{ sales.paginator.num_pages }}
+
+</span>
+
+{% if sales.has_next %}
+
+<a href="?page={{ sales.next_page_number }}">
+Next ›
+</a>
+
+<a href="?page={{ sales.paginator.num_pages }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+
+<script>
+
+function toggleFilter() {
+
+    let panel =
+        document.getElementById(
+            'filterPanel'
+        );
+
+    panel.style.display =
+        panel.style.display === 'none'
+        ? 'block'
+        : 'none';
+}
+
+</script>
+
+{% endblock %}

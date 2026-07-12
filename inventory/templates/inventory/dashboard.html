@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.dashboard-card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-3px);
+}
+
+.dashboard-card h3{
+    margin-top:0;
+    color:#6b7280;
+    font-size:16px;
+}
+
+.dashboard-number{
+    font-size:32px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+.section-title{
+    margin-top:30px;
+    margin-bottom:15px;
+}
+
+</style>
+<h1>Dashboard</h1>
+
+<div class="dashboard-grid">
+
+    <div class="dashboard-card">
+        <h3>Total Medicines</h3>
+        <div class="dashboard-number">
+            {{ medicines }}
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Total Suppliers</h3>
+        <div class="dashboard-number">
+            {{ suppliers }}
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Low Stock Medicines</h3>
+        <div class="dashboard-number">
+            {{ low_stock }}
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Expired Medicines</h3>
+        <div class="dashboard-number">
+            {{ expired }}
+        </div>
+    </div>
+
+</div>
+
+<br>
+
+<h2 class="section-title">
+    Alert Summary
+</h2>
+
+<div class="dashboard-grid">
+
+```
+<div class="dashboard-card">
+    <h3>Expiring Soon</h3>
+    <div class="dashboard-number">
+        {{ expiring_count }}
+    </div>
+</div>
+
+<div class="dashboard-card">
+    <h3>Out of Stock</h3>
+    <div class="dashboard-number">
+        {{ out_of_stock_count }}
+    </div>
+</div>
+
+<div class="dashboard-card">
+    <h3>Critical Stock</h3>
+    <div class="dashboard-number">
+        {{ critical_stock_count }}
+    </div>
+</div>
+
+<div class="dashboard-card">
+    <h3>Today's Sales Count</h3>
+    <div class="dashboard-number">
+        {{ today_sales_count }}
+    </div>
+</div>
+```
+
+</div>
+
+<br>
+
+<h2 class="section-title">
+    Today's Business
+</h2>
+
+<div class="dashboard-grid">
+
+```
+<div class="dashboard-card">
+    <h3>Today's Sales</h3>
+    <div class="dashboard-number">
+        ₹ {{ today_sales_revenue }}
+    </div>
+</div>
+
+<div class="dashboard-card">
+
+    <h3>Today's Purchases</h3> 
+
+    <div class="dashboard-number">
+
+        ₹ {{ today_purchase_cost }} 
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+
+
+    <h3>Today's Profit</h3> 
+
+
+
+    <div class="dashboard-number">
+
+
+
+        ₹ {{ today_profit }} 
+
+
+
+    </div>
+
+
+
+</div>
+```
+
+</div>
+
+<br>
+
+<h2 class="section-title">
+    Total Business
+</h2>
+
+<div class="dashboard-grid">
+
+```
+<div class="dashboard-card">
+    <h3>Total Sales</h3>
+    <div class="dashboard-number">
+        ₹ {{ total_sales_revenue }}
+    </div>
+</div>
+
+<div class="dashboard-card">
+
+    <h3>Total Purchases</h3> 
+
+    <div class="dashboard-number">
+
+        ₹ {{ total_purchase_cost}} 
+
+    </div>
+
+</div>
+
+<div class="dashboard-card">
+
+
+
+    <h3>Total Profit</h3> 
+
+
+
+    <div class="dashboard-number">
+
+
+
+        ₹ {{ estimated_profit}} 
+
+
+
+    </div>
+
+
+
+</div>
+```
+
+</div>
+
+<br>
+
+{% if out_of_stock_count > 0 %}
+
+<div style="
+background:#dc3545;
+color:white;
+padding:15px;
+border-radius:5px;
+margin-bottom:20px;
+font-weight:bold;
+">
+
+⚠ Critical Alert:
+{{ out_of_stock_count }} medicine(s) are out of stock.
+
+</div>
+
+{% endif %}
+
+<h2 style="color:red;">
+⚠ Low Stock Medicines
+</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Medicine</th>
+    <th>Stock</th>
+</tr>
+
+{% for medicine in low_stock_medicines %}
+
+<tr>
+
+```
+<td>{{ medicine.name }}</td>
+
+<td>
+
+    <span style="
+    background:#dc3545;
+    color:white;
+    padding:4px 10px;
+    border-radius:5px;
+    font-weight:bold;
+    ">
+        {{ medicine.stock_quantity }}
+    </span>
+
+</td>
+```
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="2">
+        No low stock medicines
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<h2 style="color:orange;">
+⚠ Expiring Soon Medicines
+</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Medicine</th>
+    <th>Expiry Information</th>
+</tr>
+
+{% for medicine in expiring_soon %}
+
+<tr>
+
+```
+<td>{{ medicine.name }}</td>
+
+<td>
+
+    <span style="
+    background:#ffc107;
+    padding:4px 10px;
+    border-radius:5px;
+    font-weight:bold;
+    ">
+        {{ medicine.expiry_date }}
+    </span>
+
+    <br>
+
+    <small style="color:red;">
+        {{ medicine.days_left }} days left
+    </small>
+
+</td>
+```
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="2">
+        No medicines expiring soon
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

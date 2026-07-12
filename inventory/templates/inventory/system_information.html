@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:800px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+">
+
+<h1>System Information</h1>
+
+<hr>
+
+<p>
+<strong>Total Medicines:</strong>
+{{ total_medicines }}
+</p>
+
+<p>
+<strong>Total Suppliers:</strong>
+{{ total_suppliers }}
+</p>
+
+<p>
+<strong>Total Purchases:</strong>
+{{ total_purchases }}
+</p>
+
+<p>
+<strong>Total Sales:</strong>
+{{ total_sales }}
+</p>
+
+<p>
+<strong>Total Users:</strong>
+{{ total_users }}
+</p>
+
+<p>
+<strong>Total Stock Transactions:</strong>
+{{ total_transactions }}
+</p>
+
+</div>
+
+{% endblock %}

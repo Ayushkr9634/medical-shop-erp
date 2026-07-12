@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:700px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+">
+
+<h1>My Profile</h1>
+
+<hr>
+
+<p>
+<strong>Username:</strong>
+{{ user_obj.username }}
+</p>
+
+<p>
+<strong>Email:</strong>
+{{ user_obj.email|default:"Not Provided" }}
+</p>
+
+<p>
+<strong>Role:</strong>
+
+{% if user_obj.groups.first %}
+    {{ user_obj.groups.first.name }}
+{% else %}
+    No Role Assigned
+{% endif %}
+
+</p>
+
+<p>
+<strong>Date Joined:</strong>
+{{ user_obj.date_joined }}
+</p>
+
+<p>
+<strong>Last Login:</strong>
+{{ user_obj.last_login }}
+</p>
+
+<br>
+
+<a
+href="{% url 'user_change_password' user_obj.id %}"
+style="
+background:#007bff;
+color:white;
+padding:10px 20px;
+text-decoration:none;
+border-radius:5px;
+"
+>
+Change Password
+</a>
+
+</div>
+
+{% endblock %}

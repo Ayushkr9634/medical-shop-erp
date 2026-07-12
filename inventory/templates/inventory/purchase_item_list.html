@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#f8f9fa;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-top:1px solid #eee;
+}
+
+tr:hover{
+    background:#f9fafb;
+}</style>
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Purchase Items</h1>
+<form method="GET">
+
+    <input
+        type="text"
+        name="q"
+        placeholder="Search medicine..."
+    >
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<br>
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Invoice</th>
+    <th>Medicine</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Action</th>
+</tr>
+
+{% for item in items %}
+
+<tr>
+
+    <td>{{ item.purchase.invoice_number }}</td>
+
+    <td>{{ item.medicine.name }}</td>
+
+    <td>{{ item.quantity }}</td>
+
+    <td>{{ item.purchase_price }}</td>
+
+    <td>
+
+        <a href="{% url 'purchase_item_delete' item.id %}">
+            Undo
+        </a>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

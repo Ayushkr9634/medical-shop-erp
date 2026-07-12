@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>
+
+Verify OTP
+
+</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#eef2f7;
+
+}
+
+.container{
+
+width:420px;
+
+margin:70px auto;
+
+background:white;
+
+padding:30px;
+
+border-radius:10px;
+
+box-shadow:0 2px 12px rgba(0,0,0,.15);
+
+}
+
+h2{
+
+margin-top:0;
+
+}
+
+input{
+
+width:100%;
+
+padding:12px;
+
+margin-top:5px;
+
+margin-bottom:18px;
+
+border:1px solid #ccc;
+
+border-radius:6px;
+
+font-size:15px;
+
+box-sizing:border-box;
+
+}
+
+button{
+
+width:100%;
+
+padding:12px;
+
+background:#2563eb;
+
+color:white;
+
+border:none;
+
+border-radius:6px;
+
+cursor:pointer;
+
+font-size:15px;
+
+font-weight:bold;
+
+}
+
+button:hover{
+
+background:#1d4ed8;
+
+}
+
+.success{
+
+background:#dcfce7;
+
+color:#166534;
+
+padding:12px;
+
+border-radius:6px;
+
+margin-bottom:15px;
+
+}
+
+.error{
+
+background:#fee2e2;
+
+color:#991b1b;
+
+padding:12px;
+
+border-radius:6px;
+
+margin-bottom:15px;
+
+}
+
+a{
+
+text-decoration:none;
+
+color:#2563eb;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>
+
+OTP Verification
+
+</h2>
+
+<p>
+
+Enter the 6-digit OTP sent to your registered email.
+
+</p>
+
+{% if messages %}
+
+{% for message in messages %}
+
+<div class="{{ message.tags }}">
+
+{{ message }}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button type="submit">
+
+Verify OTP
+
+</button>
+<br><br>
+
+<div style="text-align:center;">
+
+<a href="{% url 'resend_otp' %}">
+
+Didn't receive OTP?
+
+<b>Resend OTP</b>
+<br>
+
+<p style="text-align:center;color:#6b7280;font-size:13px;">
+
+OTP expires in 5 minutes.
+
+</p>
+</a>
+
+</div>
+</form>
+
+<br>
+
+<a href="{% url 'forgot_password' %}">
+
+← Back
+
+</a>
+
+</div>
+
+</body>
+
+</html>

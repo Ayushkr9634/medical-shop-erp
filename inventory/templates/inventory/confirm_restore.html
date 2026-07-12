@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:700px;
+margin:40px auto;
+padding:30px;
+background:white;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.1);
+">
+
+    <h1 style="color:red;">
+        ⚠ Confirm Database Restore
+    </h1>
+
+    <hr>
+
+    <p>
+        You are about to restore a database backup.
+    </p>
+
+    <p style="color:red;font-weight:bold;">
+        Warning:
+        This action may overwrite current data.
+    </p>
+
+    <ul>
+        <li>Medicines</li>
+        <li>Suppliers</li>
+        <li>Purchases</li>
+        <li>Purchase Items</li>
+        <li>Sales</li>
+        <li>Sale Items</li>
+        <li>Stock Transactions</li>
+        <li>Shop Settings</li>
+    </ul>
+
+    <p>
+        Make sure you have created a backup before continuing.
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            style="
+            background:red;
+            color:white;
+            border:none;
+            padding:12px 25px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:16px;
+            "
+        >
+            Restore Database
+        </button>
+
+        <a
+            href="{% url 'dashboard' %}"
+            style="
+            margin-left:15px;
+            text-decoration:none;
+            background:#6c757d;
+            color:white;
+            padding:12px 25px;
+            border-radius:6px;
+            "
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

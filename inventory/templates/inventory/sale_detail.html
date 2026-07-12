@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+
+.invoice-container{
+    background:white;
+    padding:30px;
+}
+
+.invoice-header{
+    text-align:center;
+}
+
+.invoice-header h1{
+    margin-bottom:5px;
+}
+
+.invoice-header p{
+    margin:3px 0;
+}
+
+.invoice-info{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.invoice-info td{
+    padding:8px;
+}
+
+.invoice-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.invoice-table th{
+    border:1px solid black;
+    padding:10px;
+}
+
+.invoice-table td{
+    border:1px solid black;
+    padding:10px;
+}
+
+.total-section{
+    text-align:right;
+}
+
+.footer-section{
+    display:flex;
+    justify-content:space-between;
+    margin-top:50px;
+}
+
+.signature{
+    text-align:center;
+    min-width:200px;
+    border-top:1px solid black;
+    padding-top:10px;
+}
+
+@media print{
+
+    .no-print{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+
+}
+
+</style>
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+
+<div class="invoice-container">
+
+    <div class="invoice-header">
+
+        <h1>{{ shop.shop_name }}</h1>
+
+        <p>
+            {{ shop.address }}
+        </p>
+
+        <p>
+            Mobile: {{ shop.mobile }}
+        </p>
+
+        <p>
+            Email: {{ shop.email }}
+        </p>
+
+        <p>
+            Drug License No:
+            {{ shop.drug_license_number }}
+        </p>
+
+        <p>
+            GST No:
+            {{ shop.gst_number }}
+        </p>
+        
+
+    </div>
+
+    <hr>
+
+    <table class="invoice-info">
+
+        <tr>
+
+            <td>
+                <strong>
+                    Invoice No:
+                </strong>
+                {{ sale.invoice_number }}
+            </td>
+
+            <td>
+                <strong>
+                    Invoice Date:
+                </strong>
+                {{ sale.sale_date }}
+            </td>
+
+        </tr>
+
+        <tr>
+
+    <td colspan="2">
+
+        <h3>
+            Customer Details
+        </h3>
+
+    </td>
+
+</tr>
+
+<tr>
+
+    <td>
+
+        <strong>Name:</strong>
+
+        {{ sale.customer_name }}
+
+    </td>
+
+    <td>
+
+        <strong>Mobile:</strong>
+
+        {{ sale.customer_mobile }}
+
+    </td>
+
+</tr>
+
+<tr>
+
+    <td colspan="2">
+
+        <strong>Address:</strong>
+
+        {{ sale.customer_address }}
+
+    </td>
+
+</tr>
+
+{% if sale.customer_email %}
+
+<tr>
+
+    <td colspan="2">
+
+        <strong>Email:</strong>
+
+        {{ sale.customer_email }}
+
+    </td>
+
+</tr>
+
+{% endif %}
+
+{% if sale.customer_gst %}
+
+<tr>
+
+    <td>
+
+        <strong>GST:</strong>
+
+        {{ sale.customer_gst }}
+
+    </td>
+
+{% else %}
+
+<td></td>
+
+{% endif %}
+
+{% if sale.customer_drug_license %}
+
+<td>
+
+    <strong>Drug License:</strong>
+
+    {{ sale.customer_drug_license }}
+
+</td>
+
+{% else %}
+
+<td></td>
+
+{% endif %}
+
+</tr>
+
+    </table>
+
+    <br>
+
+    <table class="invoice-table">
+
+        <thead>
+
+        <tr>
+
+            <th>#</th>
+
+            <th>Medicine</th>
+
+            <th>Qty</th>
+
+            <th>Rate</th>
+
+            <th>Total</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for item in items %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+            <td>
+                {{ item.medicine.name }}
+            </td>
+
+            <td>
+                {{ item.quantity }}
+            </td>
+
+            <td>
+                ₹ {{ item.selling_price }}
+            </td>
+
+            <td>
+                ₹ {{ item.line_total }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <div class="total-section">
+
+        <h2>
+            Grand Total:
+            ₹ {{ total }}
+        </h2>
+
+    </div>
+
+    <br><br>
+
+    <div class="footer-section">
+
+        <div>
+
+            Thank you for your purchase.
+
+        </div>
+
+        <div class="signature">
+
+            Authorized Signature
+
+        </div>
+
+    </div>
+
+</div>
+
+<br>
+
+<button
+    class="no-print"
+    onclick="window.print()">
+    Print Invoice
+</button>
+{% endblock %}

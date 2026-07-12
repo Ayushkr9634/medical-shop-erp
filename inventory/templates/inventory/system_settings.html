@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+.settings-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+}
+
+.back-btn{
+    text-decoration:none;
+    color:#374151;
+    background:white;
+    border:1px solid #e5e7eb;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.back-btn:hover{
+    background:#f8fafc;
+}
+
+.page-title{
+    font-size:34px;
+    font-weight:700;
+    color:#111827;
+    margin-bottom:8px;
+}
+
+.page-subtitle{
+    color:#6b7280;
+    font-size:15px;
+}
+
+.settings-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+
+    gap:24px;
+
+    margin-top:35px;
+
+}
+
+.setting-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    border:1px solid #ececec;
+
+    box-shadow:
+    0 10px 30px rgba(15,23,42,.05);
+
+    transition:.25s;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    min-height:150px;
+
+}
+
+.setting-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:
+    0 18px 40px rgba(15,23,42,.10);
+
+    border-color:#2563eb;
+
+}
+
+.card-title{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin-bottom:12px;
+
+}
+
+.card-description{
+
+    color:#6b7280;
+
+    line-height:1.7;
+
+    font-size:15px;
+
+}
+
+.card-footer{
+
+    margin-top:25px;
+
+    color:#2563eb;
+
+    font-weight:600;
+
+    font-size:14px;
+
+}
+
+</style>
+
+<div class="settings-header">
+
+<div>
+
+<div class="page-title">
+
+Settings
+
+</div>
+
+<div class="page-subtitle">
+
+Manage your Medical Shop ERP configuration.
+
+</div>
+
+</div>
+
+<a
+href="javascript:history.back()"
+class="back-btn">
+
+← Back
+
+</a>
+
+</div>
+
+<div class="settings-grid">
+
+<a href="/dashboard/profile/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+My Profile
+
+</div>
+
+<div class="card-description">
+
+View and update your personal profile information, contact details and account preferences.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/settings/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+Shop Settings
+
+</div>
+
+<div class="card-description">
+
+Configure shop name, GST, address, logo, invoice details and other business information.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="{% url 'email_settings' %}" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+Email Configuration
+
+</div>
+
+<div class="card-description">
+
+Manage SMTP settings used for password recovery, OTP delivery and system notifications.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/users/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+User Management
+
+</div>
+
+<div class="card-description">
+
+Create users, manage roles, permissions and access control across the application.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/activity-logs/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+Activity Logs
+
+</div>
+
+<div class="card-description">
+
+Review all important activities performed by users for auditing and monitoring purposes.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/backup/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+Database Backup
+
+</div>
+
+<div class="card-description">
+
+Create a complete backup of your application database before major updates or maintenance.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/restore/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+Database Restore
+
+</div>
+
+<div class="card-description">
+
+Restore the application using a previously generated backup file whenever required.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+
+
+<a href="/dashboard/system-information/" class="setting-card">
+
+<div>
+
+<div class="card-title">
+
+System Information
+
+</div>
+
+<div class="card-description">
+
+View application version, database information, Python environment and server configuration.
+
+</div>
+
+</div>
+
+<div class="card-footer">
+
+Open →
+
+</div>
+
+</a>
+
+</div>
+
+{% endblock %}

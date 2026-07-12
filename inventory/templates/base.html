@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <title>Medical Shop Management</title>
+    {% load static %}
+    <link
+    rel="stylesheet"
+    href="{% static 'css/style.css' %}"
+>
+    <style>
+        .filter-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+        .password-box{
+
+position:relative;
+
+width:100%;
+
+}
+
+.password-box input{
+
+width:100%;
+
+padding-right:45px;
+
+box-sizing:border-box;
+
+}
+
+.toggle-password{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+color:#6b7280;
+
+font-size:18px;
+
+transition:.2s;
+
+}
+
+.toggle-password:hover{
+
+color:#2563eb;
+
+}
+        .filter-grid label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:600;
+}
+
+        .filter-grid input,
+        .filter-grid select{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+        .reset-btn{
+    background:#6b7280;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-left:10px;
+}
+        .action-btn{
+    background:#2563eb;
+    color:white;
+    padding:6px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}       
+        .action-btn{
+    background:#2563eb;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    margin-right:5px;
+}
+
+        .delete-btn{
+    background:#dc3545;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+        .delete-btn:hover{
+    background:#bb2d3b;
+}
+        .search-filter-form{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+        .search-box{
+    width:300px;
+}
+
+        .filter-select{
+    min-width:180px;
+}
+
+        .search-filter-form button{
+    margin:0;
+}
+        .filter-select{
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-left:10px;
+    background:white;
+    min-width:180px;
+}
+        .action-btn-stock{
+    background:#fd7e14;
+    color:white;
+    padding:6px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}
+        .toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+        .search-box{
+    width:350px;
+    padding:10px 15px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+}
+        .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+        .add-btn{
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:8px;
+    font-weight:600;
+    
+}
+
+        .add-btn:hover{
+    background:#1d4ed8;
+}       
+        .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+        .header-buttons{
+    display:flex;
+    gap:10px;
+}
+
+        .toolbar{
+    margin-top:15px;
+    margin-bottom:20px;
+}
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            background: #f4f6f9;
+        }
+        .alert-success{
+    background:#d1e7dd;
+    color:#0f5132;
+}       
+        .alert-danger{
+    background:#f8d7da;
+    color:#842029;
+}
+        .sidebar{
+    width:250px;
+    background:#1f2937;
+    min-height:100vh;
+}
+
+        .sidebar a{
+    color:white;
+    display:block;
+    padding:12px 20px;
+    text-decoration:none;
+}
+
+        .sidebar a:hover{
+    background:#2563eb;
+}
+
+        .sidebar {
+    width: 250px;
+    background: #111827;
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,.15);
+}
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px 15px;
+    margin-bottom:8px;
+    border-radius:8px;
+    transition:.2s;
+}
+
+        .content {
+    flex:1;
+    padding:30px;
+}
+        @media print {
+
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+}
+@media print {
+
+    .no-print {
+        display: none;
+    }
+
+}
+@media print {
+
+    .sidebar {
+        display: none;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+}
+@media print {
+
+    .sidebar {
+        display: none;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+}
+    table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+    th{
+    background:#f8fafc;
+    padding:14px;
+    text-align:left;
+}
+
+    td{
+    padding:12px;
+    border-top:1px solid #e5e7eb;
+}
+
+    tr:hover{
+    background:#f9fafb;
+}
+    button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+    button:hover{
+    background:#1d4ed8;
+}
+    input,
+    select,
+    textarea{
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+}
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+}
+    </style>
+</head>
+
+<body>
+{% with role=request.user.groups.first.name %}
+<div class="sidebar">
+
+    <h2>Medical Shop</h2>
+    {% if request.user.groups.first.name == 'Admin' %}
+
+{% if role == 'Admin' %}
+<a href="/dashboard/system-settings/">
+    Settings
+</a>
+{% endif %}
+
+{% endif %}
+    <a href="/dashboard/">Dashboard</a>
+    <a href="/dashboard/profile/">
+    My Profile
+</a>
+    {% if role == 'Admin' or role == 'Pharmacist' %}
+<a href="/dashboard/medicines/">
+    Medicines
+</a>
+{% endif %}
+
+    {% if role == 'Admin' or role == 'Pharmacist' %}
+<a href="/dashboard/suppliers/">
+    Suppliers
+</a>
+{% endif %}
+
+    {% if role == 'Admin' or role == 'Pharmacist' %}
+<a href="/dashboard/purchases/">
+    Purchases
+</a>
+
+<a href="/dashboard/purchase-items/">
+    Purchase Items
+</a>
+{% endif %}
+    <a href="/dashboard/sales/">
+        Sales
+    </a>
+<a href="/dashboard/sale-items/">
+    Sale Items
+</a>
+<a href="/dashboard/stock-transactions/">
+    Stock History
+</a>
+<hr>
+
+<p>
+Logged in as:
+<strong>{{ request.user.username }}</strong>
+</p>
+
+<form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">
+        Logout
+    </button>
+</form>
+</div>
+{% endwith %}
+<div class="content">
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div style="
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+background:#d1e7dd;
+color:#0f5132;
+border-left:5px solid #198754;
+font-weight:600;
+">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+    {% block content %}
+    
+    {% endblock %}
+
+</div>
+<script>
+function togglePassword(id, icon){
+
+    const input=document.getElementById(id);
+
+    const eye=icon.querySelector("i");
+
+    if(input.type==="password"){
+
+        input.type="text";
+
+        eye.classList.remove("fa-eye");
+
+        eye.classList.add("fa-eye-slash");
+
+    }
+
+    else{
+
+        input.type="password";
+
+        eye.classList.remove("fa-eye-slash");
+
+        eye.classList.add("fa-eye");
+
+    }
+
+}
+</script>
+
+</body>
+</body>
+</html>

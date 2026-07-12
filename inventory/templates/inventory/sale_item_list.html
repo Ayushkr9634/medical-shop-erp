@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin-bottom:15px;">
+
+
+<a href="javascript:history.back()"
+   style="
+   background:#6c757d;
+   color:white;
+   padding:8px 15px;
+   text-decoration:none;
+   border-radius:5px;
+   display:inline-block;
+   ">
+    ← Back
+</a>
+
+
+</div>
+
+<div class="page-header">
+
+
+<h1>Sale Items</h1>
+
+<a href="/dashboard/sale-items/add/"
+   class="add-btn">
+
+    + Add Sale Item
+
+</a>
+
+
+</div>
+
+<div class="toolbar">
+
+<form method="GET"
+      class="search-filter-form">
+
+
+<input
+    class="search-box"
+    type="text"
+    name="q"
+    value="{{ request.GET.q }}"
+    placeholder="Search invoice or medicine..."
+>
+
+<button type="submit">
+    Search
+</button>
+
+
+</form>
+
+</div>
+
+<table>
+
+<tr>
+
+
+<th>Invoice</th>
+
+<th>Medicine</th>
+
+<th>Quantity</th>
+
+<th>Selling Price</th>
+
+<th>Total</th>
+
+<th>Action</th>
+
+
+</tr>
+
+{% for item in items %}
+
+<tr>
+
+
+<td>
+
+    {{ item.sale.invoice_number }}
+
+</td>
+
+<td>
+
+    {{ item.medicine.name }}
+
+</td>
+
+<td>
+
+    {{ item.quantity }}
+
+</td>
+
+<td>
+
+    ₹ {{ item.selling_price }}
+
+</td>
+
+<td>
+
+    <span style="
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:5px 10px;
+    border-radius:20px;
+    font-weight:bold;
+    ">
+        ₹ {{ item.line_total }}
+    </span>
+
+</td>
+
+<td>
+
+    <a class="action-btn"
+       href="{% url 'sale_detail' item.sale.id %}">
+        View
+    </a>
+    |
+    <a class="delete-btn"
+       href="{% url 'sale_item_delete' item.id %}">
+        Delete
+    </a>
+
+</td>
+
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+
+<td colspan="6">
+
+    No sale items found
+
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<div class="pagination">
+
+{% if items.has_previous %}
+
+<a href="?page=1&q={{ request.GET.q }}">
+« First
+</a>
+
+<a href="?page={{ items.previous_page_number }}&q={{ request.GET.q }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span class="pagination-info">
+
+Page {{ items.number }}
+
+of
+
+{{ items.paginator.num_pages }}
+
+</span>
+
+{% if items.has_next %}
+
+<a href="?page={{ items.next_page_number }}&q={{ request.GET.q }}">
+Next ›
+</a>
+
+<a href="?page={{ items.paginator.num_pages }}&q={{ request.GET.q }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

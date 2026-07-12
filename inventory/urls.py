@@ -1,0 +1,315 @@
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from .views import (
+    dashboard,adjust_stock,undo_stock_transaction,toggle_user_status,
+    medicine_list,restore_database,user_add,user_delete,
+    supplier_list,confirm_restore,user_edit,user_change_password,
+    purchase_list,system_settings,activity_logs,backup_database,confirm_backup,
+    sale_list,medicine_add,user_list,profile,system_information,
+    medicine_edit,medicine_delete,supplier_add,supplier_edit,forgot_username,
+    forgot_password,test_email,setup_verify,setup_resend_otp,
+    verify_otp,email_settings,home,
+    reset_password,resend_otp,setup
+    ,supplier_delete,purchase_add,
+    purchase_item_add,purchase_item_list,
+    purchase_item_delete,sale_add,sale_item_add,
+    sale_item_list,sale_item_delete,sale_detail,purchase_detail,purchase_delete,sale_delete,stock_transaction_list,shop_settings,backup_database
+    )
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns = [
+    path(
+        'dashboard/',
+        dashboard,
+        name='dashboard'
+    ),
+
+    path(
+        'dashboard/medicines/',
+        medicine_list,
+        name='medicine_list'
+    ),
+    path(
+    'dashboard/suppliers/',
+    supplier_list,
+    name='supplier_list'
+    ),
+    path(
+    'dashboard/purchases/',
+    purchase_list,
+    name='purchase_list'
+    ),
+    path(
+    'dashboard/sales/',
+    sale_list,
+    name='sale_list'
+    ),
+    path(
+    'dashboard/medicines/add/',
+    medicine_add,
+    name='medicine_add'
+    ),
+    path(
+    'dashboard/medicines/edit/<int:pk>/',
+    medicine_edit,
+    name='medicine_edit'
+    ),
+    path(
+    'dashboard/medicines/delete/<int:pk>/',
+    medicine_delete,
+    name='medicine_delete'
+    ),
+    path(
+    'dashboard/suppliers/add/',
+    supplier_add,
+    name='supplier_add'
+    ),
+    path(
+    'dashboard/suppliers/edit/<int:pk>/',
+    supplier_edit,
+    name='supplier_edit'
+    ),
+    path(
+    'dashboard/suppliers/delete/<int:pk>/',
+    supplier_delete,
+    name='supplier_delete'
+    ),
+    path(
+    'dashboard/purchases/add/',
+    purchase_add,
+    name='purchase_add'
+    ),
+    path(
+    'dashboard/purchase-items/add/',
+    purchase_item_add,
+    name='purchase_item_add'
+    ),
+    path(
+    'dashboard/purchase-items/',
+    purchase_item_list,
+    name='purchase_item_list'
+    ),
+    path(
+    'dashboard/purchase-items/delete/<int:pk>/',
+    purchase_item_delete,
+    name='purchase_item_delete'
+    ),
+    path(
+    'dashboard/sales/add/',
+    sale_add,
+    name='sale_add'
+    ),
+    path(
+    'dashboard/sale-items/add/',
+    sale_item_add,
+    name='sale_item_add'
+    ),
+    path(
+    'dashboard/sale-items/',
+    sale_item_list,
+    name='sale_item_list'
+    ),
+    path(
+    'dashboard/sale-items/delete/<int:pk>/',
+    sale_item_delete,
+    name='sale_item_delete'
+    ),
+    path(
+    'dashboard/sales/<int:pk>/',
+    sale_detail,
+    name='sale_detail'
+    ),
+    path(
+    'dashboard/purchases/<int:pk>/',
+    purchase_detail,
+    name='purchase_detail'
+    ),
+    path(
+    'dashboard/purchases/delete/<int:pk>/',
+    purchase_delete,
+    name='purchase_delete'
+    ),
+    path(
+    'dashboard/sales/delete/<int:pk>/',
+    sale_delete,
+    name='sale_delete'
+    ),
+    path(
+    'dashboard/stock-transactions/',
+    stock_transaction_list,
+    name='stock_transaction_list'
+    ),
+    path(
+    'dashboard/settings/',
+    shop_settings,
+    name='shop_settings'
+    ),
+    path(
+    'dashboard/backup/',
+    backup_database,
+    name='backup_database'
+    ),
+    path(
+    'dashboard/restore/',
+    restore_database,
+    name='restore_database'
+    ),
+    path(
+    'dashboard/restore/confirm/',
+    confirm_restore,
+    name='confirm_restore'
+    ),
+    path(
+    'dashboard/system-settings/',
+    system_settings,
+    name='system_settings'
+    ),
+    path(
+    'dashboard/users/',
+    user_list,
+    name='user_list'
+    ),
+    path(
+    'dashboard/users/add/',
+    user_add,
+    name='user_add'
+    ),
+    path(
+    'dashboard/users/delete/<int:pk>/',
+    user_delete,
+    name='user_delete'
+    ),
+    path(
+
+    "dashboard/email-settings/",
+
+    email_settings,
+
+    name="email_settings"
+
+),
+    path(
+    'dashboard/users/edit/<int:pk>/',
+    user_edit,
+    name='user_edit'
+    ),
+    path(
+    "dashboard/test-email/",
+    test_email,
+    name="test_email"
+),
+    path(
+    'dashboard/users/password/<int:pk>/',
+    user_change_password,
+    name='user_change_password'
+    ),
+    path(
+    'dashboard/users/toggle-status/<int:pk>/',
+    toggle_user_status,
+    name='toggle_user_status'
+),
+    path(
+    'dashboard/activity-logs/',
+    activity_logs,
+    name='activity_logs'
+    ),
+    path(
+    'dashboard/profile/',
+    profile,
+    name='profile'
+    ),
+    path(
+
+    "resend-otp/",
+
+    resend_otp,
+
+    name="resend_otp"
+
+),
+    path(
+    'dashboard/system-information/',
+    system_information,
+    name='system_information'
+    ),
+    path(
+    "",
+    home,
+    name="home"
+),
+    
+    path(
+    "login/",
+    auth_views.LoginView.as_view(),
+    name="login"
+),
+    path(
+    'logout/',
+    auth_views.LogoutView.as_view(
+        next_page='login'
+    ),
+    name='logout'
+    ),
+    path(
+    "forgot-username/",
+    forgot_username,
+    name="forgot_username"
+),
+
+    path(
+    "forgot-password/",
+    forgot_password,
+    name="forgot_password"
+),
+    path(
+    "setup/",
+    setup,
+    name="setup"
+),
+    path(
+    "setup/verify/",
+    setup_verify,
+    name="setup_verify"
+),
+    path(
+    "verify-otp/",
+    verify_otp,
+    name="verify_otp"
+),
+
+    path(
+    "reset-password/",
+    reset_password,
+    name="reset_password"
+),
+
+    path(
+    "setup/resend-otp/",
+    setup_resend_otp,
+    name="setup_resend_otp",
+),
+    path(
+    'dashboard/backup/',
+    backup_database,
+    name='backup_database'
+    ),
+    path(
+    'dashboard/backup/confirm/',
+    confirm_backup,
+    name='confirm_backup'
+    ),
+    path(
+    'dashboard/medicine/<int:medicine_id>/adjust-stock/',
+    adjust_stock,
+    name='adjust_stock'
+    ),
+    path(
+    'dashboard/stock-transactions/<int:id>/undo/',
+    undo_stock_transaction,
+    name='undo_stock_transaction'
+    ),
+]
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)

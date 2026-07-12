@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin-bottom:15px;">
+
+
+<a href="javascript:history.back()"
+   style="
+   background:#6c757d;
+   color:white;
+   padding:8px 15px;
+   text-decoration:none;
+   border-radius:5px;
+   display:inline-block;
+   ">
+    ← Back
+</a>
+
+
+</div>
+
+<div class="page-header">
+
+
+<h1>Suppliers</h1>
+
+<a href="/dashboard/suppliers/add/"
+   class="add-btn">
+    + Add Supplier
+</a>
+
+
+</div>
+
+<div class="toolbar">
+
+<form method="GET"
+      class="search-filter-form">
+
+
+<input
+    class="search-box"
+    type="text"
+    name="q"
+    value="{{ request.GET.q }}"
+    placeholder="Search suppliers..."
+>
+
+<button type="submit">
+    Search
+</button>
+
+<button
+    type="button"
+    onclick="toggleFilter()">
+    Filter
+</button>
+
+
+</form>
+
+</div>
+
+<div id="filterPanel"
+     style="
+     display:none;
+     background:white;
+     padding:20px;
+     border-radius:10px;
+     margin-bottom:20px;
+     box-shadow:0 2px 10px rgba(0,0,0,.1);
+">
+
+<form method="GET">
+
+
+<h3>
+    Filter Suppliers
+</h3>
+
+<div class="filter-grid">
+
+    <div>
+
+        <label>
+            Supplier Name
+        </label>
+
+        <input
+            type="text"
+            name="supplier_name"
+            value="{{ request.GET.supplier_name }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            GST Number
+        </label>
+
+        <input
+            type="text"
+            name="gst_number"
+            value="{{ request.GET.gst_number }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Drug License
+        </label>
+
+        <input
+            type="text"
+            name="drug_license_number"
+            value="{{ request.GET.drug_license_number }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Phone
+        </label>
+
+        <input
+            type="text"
+            name="phone"
+            value="{{ request.GET.phone }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Email
+        </label>
+
+        <input
+            type="text"
+            name="email"
+            value="{{ request.GET.email }}"
+        >
+
+    </div>
+
+</div>
+
+<br>
+
+<button type="submit">
+    Apply Filter
+</button>
+
+<a href="{% url 'supplier_list' %}"
+   class="reset-btn">
+    Reset
+</a>
+
+
+</form>
+
+</div>
+
+<table>
+
+<tr>
+
+
+<th>Name</th>
+
+<th>GST Number</th>
+
+<th>Drug License</th>
+
+<th>Phone</th>
+
+<th>Email</th>
+
+<th>Created</th>
+
+<th>Actions</th>
+
+
+</tr>
+
+{% for supplier in suppliers %}
+
+<tr>
+
+
+<td>
+    {{ supplier.name }}
+</td>
+
+<td>
+    {{ supplier.gst_number|default:"-" }}
+</td>
+
+<td>
+    {{ supplier.drug_license_number|default:"-" }}
+</td>
+
+<td>
+    {{ supplier.phone|default:"-" }}
+</td>
+
+<td>
+    {{ supplier.email|default:"-" }}
+</td>
+
+<td>
+    {{ supplier.created_at|date:"d M Y" }}
+</td>
+
+<td>
+
+    <a class="action-btn"
+       href="{% url 'supplier_edit' supplier.id %}">
+        Edit
+    </a>
+
+    <a class="delete-btn"
+       href="{% url 'supplier_delete' supplier.id %}">
+        Delete
+    </a>
+
+</td>
+
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+
+<td colspan="7">
+
+    No suppliers found
+
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<div class="pagination">
+
+{% if suppliers.has_previous %}
+
+<a href="?page=1&q={{ request.GET.q }}">
+« First
+</a>
+
+<a href="?page={{ suppliers.previous_page_number }}&q={{ request.GET.q }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span class="pagination-info">
+
+Page {{ suppliers.number }}
+
+of
+
+{{ suppliers.paginator.num_pages }}
+
+</span>
+
+{% if suppliers.has_next %}
+
+<a href="?page={{ suppliers.next_page_number }}&q={{ request.GET.q }}">
+Next ›
+</a>
+
+<a href="?page={{ suppliers.paginator.num_pages }}&q={{ request.GET.q }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+
+<script>
+
+function toggleFilter() {
+
+    let panel =
+        document.getElementById(
+            'filterPanel'
+        );
+
+    panel.style.display =
+        panel.style.display === 'none'
+        ? 'block'
+        : 'none';
+
+}
+
+</script>
+
+{% endblock %}

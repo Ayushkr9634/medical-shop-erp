@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#f8f9fa;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-top:1px solid #eee;
+}
+
+tr:hover{
+    background:#f9fafb;
+}</style>
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Stock Transactions</h1>
+<button onclick="toggleFilter()">
+    Filter
+</button>
+
+<div id="filterPanel"
+     style="
+     display:none;
+     margin-top:15px;
+     padding:15px;
+     border:1px solid #ccc;
+     border-radius:5px;
+     ">
+
+<form method="GET">
+
+    <p>
+        Transaction Type
+
+        <select name="type">
+
+            <option value="">
+                All
+            </option>
+
+            <option value="PURCHASE">
+                Purchase
+            </option>
+
+            <option value="SALE">
+                Sale
+            </option>
+
+            <option value="RETURN">
+                Return
+            </option>
+
+            <option value="DAMAGED">
+                Damaged
+            </option>
+
+            <option value="EXPIRED">
+                Expired
+            </option>
+
+        </select>
+
+    </p>
+
+    <p>
+        Date From
+
+        <input
+            type="date"
+            name="date_from"
+        >
+    </p>
+
+    <p>
+        Date To
+
+        <input
+            type="date"
+            name="date_to"
+        >
+    </p>
+
+    <button type="submit">
+        Apply Filter
+    </button>
+
+</form>
+
+</div>
+
+<script>
+
+function toggleFilter() {
+
+    let panel =
+        document.getElementById(
+            'filterPanel'
+        );
+
+    panel.style.display =
+        panel.style.display === 'none'
+        ? 'block'
+        : 'none';
+}
+
+</script>
+<form method="GET">
+
+    <input
+        type="text"
+        name="q"
+        value="{{ request.GET.q }}"
+        placeholder="Search medicine..."
+    >
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="10">
+
+<tr>
+
+    <th>Date</th>
+
+    <th>Medicine</th>
+
+    <th>Type</th>
+
+    <th>Quantity</th>
+    <th>Actions</th>
+    <th>Notes</th>
+
+</tr>
+
+{% for transaction in transactions %}
+
+<tr>
+
+    <td>
+        {{ transaction.created_at }}
+    </td>
+
+    <td>
+        {{ transaction.medicine.name }}
+    </td>
+
+    <td>
+
+{% if transaction.transaction_type == 'PURCHASE' %}
+
+<span style="color:green;">
+    PURCHASE
+</span>
+
+{% elif transaction.transaction_type == 'SALE' %}
+
+<span style="color:red;">
+    SALE
+</span>
+
+{% elif transaction.transaction_type == 'RETURN' %}
+
+<span style="color:blue;">
+    RETURN
+</span>
+
+{% else %}
+
+<span style="color:orange;">
+    {{ transaction.transaction_type }}
+</span>
+
+{% endif %}
+
+</td>
+
+    <td>
+
+{% if transaction.transaction_type == 'PURCHASE' or transaction.transaction_type == 'RETURN' %}
+
++{{ transaction.quantity }}
+
+{% else %}
+
+-{{ transaction.quantity }}
+
+{% endif %}
+
+</td>
+    <td>
+
+{% if transaction.transaction_type == 'EXPIRED' or transaction.transaction_type == 'DAMAGED' or transaction.transaction_type == 'LOST' %}
+
+<a href="{% url 'undo_stock_transaction' transaction.id %}">
+    Undo
+</a>
+
+{% endif %}
+
+</td>
+    <td>
+        {{ transaction.notes }}
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+    <td colspan="5">
+
+        No transactions found
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+<br>
+
+<div style="
+margin-top:20px;
+display:flex;
+gap:10px;
+align-items:center;
+">
+
+{% if transactions.has_previous %}
+
+<a href="?page=1&q={{ request.GET.q }}">
+« First
+</a>
+
+<a href="?page={{ transactions.previous_page_number }}&q={{ request.GET.q }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span>
+Page {{ transactions.number }}
+of
+{{ transactions.paginator.num_pages }}
+</span>
+
+{% if transactions.has_next %}
+
+<a href="?page={{ transactions.next_page_number }}&q={{ request.GET.q }}">
+Next ›
+</a>
+
+<a href="?page={{ transactions.paginator.num_pages }}&q={{ request.GET.q }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+{% endblock %}

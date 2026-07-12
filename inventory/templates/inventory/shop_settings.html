@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:800px;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+">
+
+<h1>🏥 Shop Settings</h1>
+
+<p>
+Update your pharmacy details.
+These details will appear on invoices.
+</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div style="margin-bottom:15px;">
+<label>Shop Name</label>
+<br>
+{{ form.shop_name }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Drug License Number</label>
+<br>
+{{ form.drug_license_number }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Mobile Number</label>
+<br>
+{{ form.mobile }}
+</div>
+<div style="margin-bottom:15px;">
+<label>GST Number</label>
+<br>
+{{ form.gst_number }}
+</div>
+<div style="margin-bottom:15px;">
+<label>Email Address</label>
+<br>
+{{ form.email }}
+</div>
+
+<div style="margin-bottom:15px;">
+<label>Address</label>
+<br>
+{{ form.address }}
+</div>
+
+<button
+style="
+background:#2563eb;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+">
+
+Save Settings
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

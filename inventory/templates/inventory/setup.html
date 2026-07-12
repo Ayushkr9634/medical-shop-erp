@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+
+Medical Shop ERP Setup
+
+</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1">
+
+<style>
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:
+"Segoe UI",
+Arial,
+sans-serif;
+
+}
+
+body{
+
+background:#edf2f7;
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.container{
+
+width:1180px;
+
+height:760px;
+
+background:white;
+
+border-radius:18px;
+
+overflow:hidden;
+
+display:flex;
+
+box-shadow:
+
+0 15px 50px
+rgba(0,0,0,.12);
+
+}
+
+.left{
+
+width:330px;
+
+background:
+
+linear-gradient(
+180deg,
+#1e3a8a,
+#1e40af
+);
+
+color:white;
+
+padding:45px;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.logo{
+
+font-size:32px;
+
+font-weight:700;
+
+margin-bottom:50px;
+
+}
+
+.step{
+
+display:flex;
+
+align-items:center;
+
+margin-bottom:35px;
+
+opacity:.45;
+
+transition:.3s;
+
+}
+
+.step.active{
+
+opacity:1;
+
+}
+
+.number{
+
+width:38px;
+
+height:38px;
+
+border-radius:50%;
+
+background:white;
+
+color:#1e40af;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-weight:bold;
+
+margin-right:15px;
+
+}
+
+.step-title{
+
+font-size:17px;
+
+font-weight:600;
+
+}
+
+.right{
+
+flex:1;
+
+padding:55px;
+
+overflow:auto;
+
+}
+
+.right h1{
+
+font-size:34px;
+
+margin-bottom:8px;
+
+color:#111827;
+
+}
+
+.subtitle{
+
+color:#6b7280;
+
+margin-bottom:40px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:
+
+1fr 1fr;
+
+gap:24px;
+
+}
+
+.form-group{
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.full{
+
+grid-column:1/3;
+
+}
+
+label{
+
+font-weight:600;
+
+margin-bottom:8px;
+
+color:#374151;
+
+}
+
+input{
+
+width:100%;
+
+padding:14px 16px;
+
+border:1px solid #d1d5db;
+
+border-radius:10px;
+
+font-size:15px;
+
+transition:.2s;
+
+}
+
+input:focus{
+
+outline:none;
+
+border-color:#2563eb;
+
+box-shadow:
+
+0 0 0 3px
+
+rgba(37,99,235,.15);
+
+}
+
+.password-box{
+
+position:relative;
+
+}
+
+.password-box input{
+
+padding-right:52px;
+
+}
+
+.eye{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+color:#6b7280;
+
+}
+
+.password-status{
+
+margin-top:8px;
+
+font-size:14px;
+
+font-weight:600;
+
+}
+
+.bottom{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-top:45px;
+
+}
+
+.login{
+
+text-decoration:none;
+
+color:#2563eb;
+
+font-weight:600;
+
+}
+
+.next{
+
+padding:14px 35px;
+
+background:#2563eb;
+
+border:none;
+
+color:white;
+
+font-size:16px;
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.next:hover{
+
+background:#1d4ed8;
+
+}
+
+.error-box{
+
+background:#fef2f2;
+
+border:1px solid #fecaca;
+
+padding:14px;
+
+border-radius:10px;
+
+margin-bottom:30px;
+
+color:#991b1b;
+
+}
+
+.success-box{
+
+background:#ecfdf5;
+
+border:1px solid #a7f3d0;
+
+padding:14px;
+
+border-radius:10px;
+
+margin-bottom:30px;
+
+color:#047857;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<div class="logo">
+
+Medical Shop ERP
+
+</div>
+
+<div class="step active">
+
+<div class="number">
+
+1
+
+</div>
+
+<div class="step-title">
+
+Shop Information
+
+</div>
+
+</div>
+
+<div class="step">
+
+<div class="number">
+
+2
+
+</div>
+
+<div class="step-title">
+
+Email Verification
+
+</div>
+
+</div>
+
+<div class="step">
+
+<div class="number">
+
+3
+
+</div>
+
+<div class="step-title">
+
+Installation
+
+</div>
+
+</div>
+
+<div class="step">
+
+<div class="number">
+
+4
+
+</div>
+
+<div class="step-title">
+
+Completed
+
+</div>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<h1>
+
+Medical Shop ERP
+
+</h1>
+
+<div class="subtitle">
+
+Configure your Medical Shop before installing the ERP.
+
+</div>
+{% if messages %}
+
+    {% for message in messages %}
+
+    <div class="{% if message.tags == 'success' %}success-box{% else %}error-box{% endif %}">
+        {{ message }}
+    </div>
+
+    {% endfor %}
+
+{% endif %}
+
+{% if form.errors %}
+
+<div class="error-box">
+
+{{ form.errors }}
+
+</div>
+
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="grid">
+
+<div class="form-group">
+
+<label>
+
+Shop Name
+
+</label>
+
+{{ form.shop_name }}
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Owner First Name
+
+</label>
+
+{{ form.owner_first_name }}
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Owner Last Name
+
+</label>
+
+{{ form.owner_last_name }}
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Email Address
+
+</label>
+
+{{ form.email }}
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Mobile Number
+
+</label>
+
+{{ form.mobile }}
+
+</div>
+
+<div class="form-group">
+
+<label>
+
+Administrator Username
+
+</label>
+
+{{ form.username }}
+
+</div>
+
+<div class="form-group full">
+
+<label>
+
+Password
+
+</label>
+
+<div class="password-box">
+
+{{ form.password }}
+
+<div
+class="eye"
+onclick="togglePassword('id_password',this)">
+
+<svg
+id="eye-password"
+xmlns="http://www.w3.org/2000/svg"
+width="22"
+height="22"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z"/>
+
+<circle
+cx="12"
+cy="12"
+r="3"/>
+
+</svg>
+
+</div>
+
+</div>
+
+<div
+id="strength"
+class="password-status">
+
+</div>
+
+</div>
+
+<div class="form-group full">
+
+<label>
+
+Confirm Password
+
+</label>
+
+<div class="password-box">
+
+{{ form.confirm_password }}
+
+<div
+class="eye"
+onclick="togglePassword('id_confirm_password',this)">
+
+<svg
+id="eye-confirm"
+xmlns="http://www.w3.org/2000/svg"
+width="22"
+height="22"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path
+stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z"/>
+
+<circle
+cx="12"
+cy="12"
+r="3"/>
+
+</svg>
+
+</div>
+
+</div>
+
+<div
+id="password-status"
+class="password-status">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="bottom">
+
+<a
+href="{% url 'login' %}"
+class="login">
+
+Already Installed? Login
+
+</a>
+
+<button
+type="submit"
+class="next">
+
+Send OTP →
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+<script>
+
+const OPEN_EYE = `
+<svg xmlns="http://www.w3.org/2000/svg"
+width="22"
+height="22"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z"/>
+
+<circle
+cx="12"
+cy="12"
+r="3"/>
+
+</svg>
+`;
+
+const CLOSED_EYE = `
+<svg xmlns="http://www.w3.org/2000/svg"
+width="22"
+height="22"
+fill="none"
+viewBox="0 0 24 24"
+stroke="currentColor">
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M3 3l18 18"/>
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M10.58 10.58A3 3 0 0012 15a3 3 0 002.42-4.42"/>
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M9.88 5.09A9.77 9.77 0 0112 4.5c6.5 0 10.5 7.5 10.5 7.5a17.76 17.76 0 01-3.08 3.81"/>
+
+<path stroke-linecap="round"
+stroke-linejoin="round"
+stroke-width="2"
+d="M6.1 6.1A17.8 17.8 0 001.5 12S5.5 19.5 12 19.5a9.77 9.77 0 004.12-.91"/>
+
+</svg>
+`;
+
+function togglePassword(id, icon){
+
+    const input = document.getElementById(id);
+
+    if(input.type==="password"){
+
+        input.type="text";
+
+        icon.innerHTML=CLOSED_EYE;
+
+    }
+
+    else{
+
+        input.type="password";
+
+        icon.innerHTML=OPEN_EYE;
+
+    }
+
+}
+
+const password =
+document.getElementById("id_password");
+
+const confirm =
+document.getElementById("id_confirm_password");
+
+const strength =
+document.getElementById("strength");
+
+const status =
+document.getElementById("password-status");
+
+function passwordStrength(){
+
+    let score = 0;
+
+    const value = password.value;
+
+    if(value.length >= 8)
+        score++;
+
+    if(/[A-Z]/.test(value))
+        score++;
+
+    if(/[a-z]/.test(value))
+        score++;
+
+    if(/[0-9]/.test(value))
+        score++;
+
+    if(/[^A-Za-z0-9]/.test(value))
+        score++;
+
+    if(value.length===0){
+
+        strength.innerHTML="";
+
+        return;
+
+    }
+
+    if(score<=2){
+
+        strength.style.color="#dc2626";
+
+        strength.innerHTML="Password Strength : Weak";
+
+    }
+
+    else if(score<=4){
+
+        strength.style.color="#d97706";
+
+        strength.innerHTML="Password Strength : Medium";
+
+    }
+
+    else{
+
+        strength.style.color="#16a34a";
+
+        strength.innerHTML="Password Strength : Strong";
+
+    }
+
+}
+
+function checkPassword(){
+
+    if(confirm.value===""){
+
+        status.innerHTML="";
+
+        return;
+
+    }
+
+    if(password.value===confirm.value){
+
+        status.style.color="#16a34a";
+
+        status.innerHTML="✓ Passwords Match";
+
+    }
+
+    else{
+
+        status.style.color="#dc2626";
+
+        status.innerHTML="✗ Passwords Do Not Match";
+
+    }
+
+}
+
+password.addEventListener(
+
+"keyup",
+
+function(){
+
+passwordStrength();
+
+checkPassword();
+
+}
+
+);
+
+confirm.addEventListener(
+
+"keyup",
+
+checkPassword
+
+);
+
+const inputs =
+document.querySelectorAll("input");
+
+inputs.forEach(function(input){
+
+input.addEventListener(
+
+"focus",
+
+function(){
+
+this.style.transition=".25s";
+
+}
+
+);
+
+});
+
+</script>
+
+</body>
+
+</html>

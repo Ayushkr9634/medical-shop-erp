@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:600px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+">
+
+    <h1>Add User</h1>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div style="
+        background:#f8d7da;
+        color:#721c24;
+        padding:10px;
+        margin-bottom:15px;
+        border-radius:5px;
+        border:1px solid #f5c6cb;
+        ">
+            Please correct the errors below.
+        </div>
+        {% endif %}
+
+        <p>
+            <strong>Username</strong><br>
+            {{ form.username }}
+            <p>
+
+    <strong>First Name</strong><br>
+
+    {{ form.first_name }}
+
+    {% for error in form.first_name.errors %}
+        <br>
+        <span style="color:red;">
+            {{ error }}
+        </span>
+    {% endfor %}
+
+</p>
+
+<p>
+
+    <strong>Last Name</strong><br>
+
+    {{ form.last_name }}
+
+    {% for error in form.last_name.errors %}
+        <br>
+        <span style="color:red;">
+            {{ error }}
+        </span>
+    {% endfor %}
+
+</p>
+            {% for error in form.username.errors %}
+                <br>
+                <span style="color:red;">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            <strong>Email</strong><br>
+            {{ form.email }}
+            <p>
+
+    <strong>Mobile Number</strong><br>
+
+    {{ form.mobile_number }}
+
+    {% for error in form.mobile_number.errors %}
+        <br>
+        <span style="color:red;">
+            {{ error }}
+        </span>
+    {% endfor %}
+
+</p>
+
+<p>
+
+    <strong>Address</strong><br>
+
+    {{ form.address }}
+
+    {% for error in form.address.errors %}
+        <br>
+        <span style="color:red;">
+            {{ error }}
+        </span>
+    {% endfor %}
+
+</p>
+            {% for error in form.email.errors %}
+                <br>
+                <span style="color:red;">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            <strong>Role</strong><br>
+            {{ form.role }}
+
+            {% for error in form.role.errors %}
+                <br>
+                <span style="color:red;">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            <strong>Password</strong><br>
+            {{ form.password1 }}
+
+            {% for error in form.password1.errors %}
+                <br>
+                <span style="color:red;">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        </p>
+
+        <p>
+            <strong>Confirm Password</strong><br>
+            {{ form.password2 }}
+
+            {% for error in form.password2.errors %}
+                <br>
+                <span style="color:red;">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        </p>
+
+        <button
+            type="submit"
+            style="
+            background:#007bff;
+            color:white;
+            border:none;
+            padding:10px 20px;
+            border-radius:5px;
+            cursor:pointer;
+            "
+        >
+            Save User
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

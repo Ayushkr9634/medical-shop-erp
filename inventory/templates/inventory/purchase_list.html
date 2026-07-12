@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th{
+    background:#f8f9fa;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-top:1px solid #eee;
+}
+
+tr:hover{
+    background:#f9fafb;
+}</style>
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div class="page-header">
+
+    <h1>Purchases</h1>
+
+    <div class="header-buttons">
+
+        <a href="/dashboard/purchases/add/"
+           class="add-btn">
+            + Add Purchase
+        </a>
+
+        <a href="/dashboard/purchase-items/add/"
+           class="add-btn">
+            + Add Item
+        </a>
+
+    </div>
+
+</div>
+
+<div class="toolbar">
+
+<form method="GET"
+      class="search-filter-form">
+
+    <input
+        class="search-box"
+        type="text"
+        name="q"
+        value="{{ request.GET.q }}"
+        placeholder="Search invoice or supplier..."
+    >
+
+    <button type="submit">
+        Search
+    </button>
+<button
+    type="button"
+    onclick="toggleFilter()"
+>
+    Filter
+</button>
+</form>
+
+
+
+</div>
+
+<div id="filterPanel"
+     style="
+     display:none;
+     background:white;
+     padding:20px;
+     border-radius:10px;
+     margin-bottom:20px;
+     box-shadow:0 2px 10px rgba(0,0,0,.1);
+">
+
+<form method="GET">
+
+<h3>
+    Filter Purchases
+</h3>
+
+<div class="filter-grid">
+
+    <div>
+
+        <label>
+            
+        </label>
+
+        <input
+            type="text"
+            name="supplier_name"
+            value="{{ request.GET.supplier_name }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Amount From
+        </label>
+
+        <input
+            type="number"
+            name="amount_min"
+            value="{{ request.GET.amount_min }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Amount To
+        </label>
+
+        <input
+            type="number"
+            name="amount_max"
+            value="{{ request.GET.amount_max }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Date From
+        </label>
+
+        <input
+            type="date"
+            name="date_from"
+            value="{{ request.GET.date_from }}"
+        >
+
+    </div>
+
+    <div>
+
+        <label>
+            Date To
+        </label>
+
+        <input
+            type="date"
+            name="date_to"
+            value="{{ request.GET.date_to }}"
+        >
+
+    </div>
+
+</div>
+
+<br>
+
+<button type="submit">
+
+    Apply Filter
+
+</button>
+
+<a href="{% url 'purchase_list' %}"
+   class="reset-btn">
+
+    Reset
+
+</a>
+
+</form>
+
+</div>
+
+<script>
+
+function toggleFilter() {
+
+    let panel =
+        document.getElementById(
+            'filterPanel'
+        );
+
+    panel.style.display =
+        panel.style.display === 'none'
+        ? 'block'
+        : 'none';
+}
+
+</script>
+<table border="1" cellpadding="10">
+
+    <tr>
+        <th>Invoice</th>
+        <th>Supplier</th>
+        <th>GST Number</th>
+        <th>Drug License</th>
+        <th>Date</th>
+        <th>Total Amount</th>
+        <th style="width:170px;">
+    Actions
+</th>
+    </tr>
+
+    {% for purchase in purchases %}
+
+    <tr>
+        <td>
+
+<a href="{% url 'purchase_detail' purchase.id %}">
+
+{{ purchase.invoice_number }}
+
+</a>
+
+</td>
+        <td>
+    {{ purchase.supplier.name }}
+</td>
+
+<td>
+    {{ purchase.supplier.gst_number|default:"-" }}
+</td>
+<td>
+    {{ purchase.supplier.drug_license_number|default:"-" }}
+</td>
+        <td>{{ purchase.purchase_date }}</td>
+        <td>
+
+<span style="
+background:#dbeafe;
+color:#1d4ed8;
+padding:5px 10px;
+border-radius:20px;
+font-weight:bold;
+white-space:nowrap;
+">
+
+₹ {{ purchase.total_amount }}
+
+</span>
+
+</td>
+        <td style="white-space:nowrap;">
+
+<a class="action-btn"
+   href="{% url 'purchase_detail' purchase.id %}">
+    View
+</a>
+|
+<a class="delete-btn"
+   href="{% url 'purchase_delete' purchase.id %}">
+    Delete
+</a>
+
+</td>
+    </tr>
+
+    {% empty %}
+
+    <tr>
+        <td colspan="7">
+            No purchases found
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+<br>
+
+<div class="pagination">
+
+{% if purchases.has_previous %}
+
+<a href="?page=1">
+« First
+</a>
+
+<a href="?page={{ purchases.previous_page_number }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span class="pagination-info">
+
+Page {{ purchases.number }}
+
+of
+
+{{ purchases.paginator.num_pages }}
+
+</span>
+
+{% if purchases.has_next %}
+
+<a href="?page={{ purchases.next_page_number }}">
+Next ›
+</a>
+
+<a href="?page={{ purchases.paginator.num_pages }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+{% endblock %}

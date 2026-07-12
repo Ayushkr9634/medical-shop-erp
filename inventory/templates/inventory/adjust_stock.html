@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Adjust Stock</h1>
+
+<div style="
+background:white;
+padding:20px;
+border-radius:10px;
+">
+
+<p>
+<b>Medicine:</b>
+{{ medicine.name }}
+</p>
+
+<p>
+<b>Current Stock:</b>
+{{ medicine.stock_quantity }}
+</p>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        Save
+    </button>
+
+</form>
+
+</div>
+
+{% endblock %}

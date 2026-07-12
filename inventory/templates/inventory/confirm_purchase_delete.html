@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Delete Purchase</h1>
+
+<p>
+
+Delete purchase
+
+<strong>
+
+{{ purchase.invoice_number }}
+
+</strong>
+
+?
+
+</p>
+
+<p>
+
+All stock from this purchase
+will be removed.
+
+</p>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<button type="submit">
+
+Delete Purchase
+
+</button>
+
+</form>
+
+<br>
+
+<a href="/dashboard/purchases/">
+
+Cancel
+
+</a>
+
+{% endblock %}

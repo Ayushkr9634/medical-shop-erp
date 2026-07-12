@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<h1>Activity Logs</h1>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Date</th>
+    <th>User</th>
+    <th>Action</th>
+</tr>
+
+{% for log in logs %}
+
+<tr>
+    <td>{{ log.created_at }}</td>
+    <td>{{ log.user }}</td>
+    <td>{{ log.action }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+<br>
+
+<div style="
+margin-top:20px;
+display:flex;
+gap:10px;
+align-items:center;
+">
+
+{% if logs.has_previous %}
+
+<a href="?page=1">
+« First
+</a>
+
+<a href="?page={{ logs.previous_page_number }}">
+‹ Previous
+</a>
+
+{% endif %}
+
+<span>
+Page {{ logs.number }}
+of
+{{ logs.paginator.num_pages }}
+</span>
+
+{% if logs.has_next %}
+
+<a href="?page={{ logs.next_page_number }}">
+Next ›
+</a>
+
+<a href="?page={{ logs.paginator.num_pages }}">
+Last »
+</a>
+
+{% endif %}
+
+</div>
+{% endblock %}

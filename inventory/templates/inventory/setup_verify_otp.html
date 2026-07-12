@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>
+
+Verify Email
+
+</title>
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1">
+
+<style>
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",Arial,sans-serif;
+
+}
+
+body{
+
+background:#edf2f7;
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.card{
+
+width:560px;
+
+background:white;
+
+border-radius:18px;
+
+padding:45px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+}
+
+h1{
+
+font-size:30px;
+
+color:#111827;
+
+margin-bottom:8px;
+
+}
+
+.subtitle{
+
+color:#6b7280;
+
+margin-bottom:35px;
+
+line-height:1.6;
+
+}
+
+.otp-container{
+
+display:flex;
+
+justify-content:center;
+
+gap:12px;
+
+margin:30px 0;
+
+}
+
+.otp-box{
+
+width:58px;
+
+height:64px;
+
+font-size:28px;
+
+font-weight:600;
+
+text-align:center;
+
+border:1px solid #d1d5db;
+
+border-radius:10px;
+
+transition:.25s;
+
+}
+
+.otp-box:focus{
+
+outline:none;
+
+border-color:#2563eb;
+
+box-shadow:0 0 0 3px rgba(37,99,235,.15);
+
+}
+
+.timer{
+
+text-align:center;
+
+margin-bottom:20px;
+
+font-size:15px;
+
+color:#6b7280;
+
+}
+
+.resend{
+
+display:block;
+
+text-align:center;
+
+text-decoration:none;
+
+color:#2563eb;
+
+font-weight:600;
+
+margin-bottom:35px;
+
+}
+
+.buttons{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.back{
+
+text-decoration:none;
+
+color:#2563eb;
+
+font-weight:600;
+
+}
+
+.verify{
+
+padding:14px 32px;
+
+background:#2563eb;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+cursor:pointer;
+
+font-size:15px;
+
+}
+
+.verify:hover{
+
+background:#1d4ed8;
+
+}
+
+.error{
+
+background:#fee2e2;
+
+padding:14px;
+
+border-radius:10px;
+
+margin-bottom:25px;
+
+color:#991b1b;
+
+}
+
+.success{
+
+background:#ecfdf5;
+
+padding:14px;
+
+border-radius:10px;
+
+margin-bottom:25px;
+
+color:#047857;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>
+
+Verify Your Email
+
+</h1>
+
+<div class="subtitle">
+
+A verification code has been sent to your registered email address.
+
+Please enter the 6-digit code below.
+
+</div>
+
+{% if messages %}
+
+{% for message in messages %}
+
+<div class="{% if message.tags == 'success' %}success{% else %}error{% endif %}">
+
+{{ message }}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input
+type="hidden"
+name="otp"
+id="otp">
+
+<div class="otp-container">
+
+<input class="otp-box" maxlength="1">
+
+<input class="otp-box" maxlength="1">
+
+<input class="otp-box" maxlength="1">
+
+<input class="otp-box" maxlength="1">
+
+<input class="otp-box" maxlength="1">
+
+<input class="otp-box" maxlength="1">
+
+</div>
+
+<div class="timer">
+
+OTP expires in
+
+<span id="countdown">
+
+05:00
+
+</span>
+
+</div>
+
+<a
+href="{% url 'setup_resend_otp' %}"
+class="resend">
+
+Resend OTP
+
+</a>
+
+<div class="buttons">
+
+<a
+href="{% url 'setup' %}"
+class="back">
+
+← Back
+
+</a>
+
+<button
+class="verify"
+type="submit">
+
+Verify OTP
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+<script>
+
+const boxes = document.querySelectorAll(".otp-box");
+
+const hiddenOTP = document.getElementById("otp");
+
+boxes[0].focus();
+
+boxes.forEach((box,index)=>{
+
+    box.addEventListener("input",function(e){
+
+        this.value=this.value.replace(/[^0-9]/g,"");
+
+        if(this.value.length===1 && index<boxes.length-1){
+
+            boxes[index+1].focus();
+
+        }
+
+        updateOTP();
+
+    });
+
+    box.addEventListener("keydown",function(e){
+
+        if(e.key==="Backspace" && this.value==="" && index>0){
+
+            boxes[index-1].focus();
+
+        }
+
+    });
+
+    box.addEventListener("paste",function(e){
+
+        e.preventDefault();
+
+        const paste=e.clipboardData.getData("text");
+
+        if(!/^\d{6}$/.test(paste)){
+
+            return;
+
+        }
+
+        paste.split("").forEach((digit,i)=>{
+
+            if(boxes[i]){
+
+                boxes[i].value=digit;
+
+            }
+
+        });
+
+        updateOTP();
+
+        boxes[5].focus();
+
+    });
+
+});
+
+function updateOTP(){
+
+    let otp="";
+
+    boxes.forEach(function(box){
+
+        otp+=box.value;
+
+    });
+
+    hiddenOTP.value=otp;
+
+}
+
+let seconds=300;
+
+const timer=document.getElementById("countdown");
+
+const resend=document.querySelector(".resend");
+
+resend.style.pointerEvents="none";
+
+resend.style.opacity=".5";
+
+const interval=setInterval(function(){
+
+    seconds--;
+
+    const min=Math.floor(seconds/60);
+
+    const sec=seconds%60;
+
+    timer.innerHTML=
+
+    String(min).padStart(2,"0")
+
+    +":"
+
+    +
+
+    String(sec).padStart(2,"0");
+
+    if(seconds<=0){
+
+        clearInterval(interval);
+
+        timer.innerHTML="Expired";
+
+        resend.style.pointerEvents="auto";
+
+        resend.style.opacity="1";
+
+    }
+
+},1000);
+
+document.querySelector("form").addEventListener("submit",function(e){
+
+    if(hiddenOTP.value.length!==6){
+
+        e.preventDefault();
+
+        alert("Please enter the complete 6-digit OTP.");
+
+        return;
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

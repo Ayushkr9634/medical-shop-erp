@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-bottom:15px;">
+
+    <a href="javascript:history.back()"
+       style="
+       background:#6c757d;
+       color:white;
+       padding:8px 15px;
+       text-decoration:none;
+       border-radius:5px;
+       display:inline-block;
+       ">
+        ← Back
+    </a>
+
+</div>
+<div style="
+max-width:600px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+">
+
+<h2>Backup Database</h2>
+
+<p>
+Are you sure you want to create a database backup?
+</p>
+
+<form method="POST"
+      action="{% url 'confirm_backup' %}">
+
+    {% csrf_token %}
+
+    <button
+        type="submit"
+        style="
+        background:#28a745;
+        color:white;
+        border:none;
+        padding:10px 20px;
+        border-radius:5px;
+        cursor:pointer;
+        "
+    >
+        Create Backup
+    </button>
+
+    <a
+        href="{% url 'system_settings' %}"
+        style="
+        margin-left:10px;
+        text-decoration:none;
+        "
+    >
+        Cancel
+    </a>
+
+</form>
+
+</div>
+
+{% endblock %}
