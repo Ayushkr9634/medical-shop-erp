@@ -27,3 +27,5 @@ staticfiles/
 # Windows
 Thumbs.db
 Desktop.ini
+# Database backups
+backup*.json
