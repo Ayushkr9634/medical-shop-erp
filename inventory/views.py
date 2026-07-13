@@ -30,6 +30,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.db import transaction
 from .models import UserProfile,EmailSettings,SetupOTP
 from .forms import (
     ForgotUsernameForm,
@@ -3037,9 +3039,55 @@ def setup_verify(request):
 
             return redirect("setup_verify")
 
-        # Continue here after OTP is verified
+        data = request.session["setup_data"]
 
-        return redirect("setup_install")
+        with transaction.atomic():
+
+            user = User.objects.create_superuser(
+
+                username=data["username"],
+
+                email=data["email"],
+
+                password=data["password"],
+
+                first_name=data["owner_first_name"],
+
+                last_name=data["owner_last_name"]
+
+    )
+
+            UserProfile.objects.create(
+
+                user=user,
+
+                mobile_number=data["mobile"]
+
+    )
+
+            InstallationStatus.objects.create(
+
+                is_completed=True,
+
+                shop_name=data["shop_name"],
+
+                owner_name=f"{data['owner_first_name']} {data['owner_last_name']}",
+
+                owner_email=data["email"]
+
+    )
+
+            record.is_verified = True
+
+            record.save()
+
+        login(request, user)
+
+        del request.session["setup_data"]
+
+        messages.success(request,"Medical Shop ERP installed successfully.")
+
+        return redirect("dashboard")
 
     form = SetupOTPForm()
 

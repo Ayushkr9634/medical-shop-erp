@@ -145,11 +145,6 @@ urlpatterns = [
     name='shop_settings'
     ),
     path(
-    'dashboard/backup/',
-    backup_database,
-    name='backup_database'
-    ),
-    path(
     'dashboard/restore/',
     restore_database,
     name='restore_database'
