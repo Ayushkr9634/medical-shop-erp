@@ -666,7 +666,25 @@ class SetupForm(forms.Form):
     mobile = forms.CharField(
         max_length=10
     )
+    drug_license_number = forms.CharField(
+    max_length=100,
+    label="Drug License Number"
+)
 
+    gst_number = forms.CharField(
+    max_length=50,
+    required=False,
+    label="GST Number"
+)
+
+    address = forms.CharField(
+    widget=forms.Textarea(
+        attrs={
+            "rows": 3
+        }
+    ),
+    label="Shop Address"
+)
     username = forms.CharField(
         max_length=150
     )

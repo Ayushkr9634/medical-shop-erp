@@ -2937,7 +2937,10 @@ def setup(request):
                 "email": form.cleaned_data["email"],
 
                 "mobile": form.cleaned_data["mobile"],
+                "drug_license_number": form.cleaned_data["drug_license_number"],
+                "gst_number": form.cleaned_data["gst_number"],
 
+                "address": form.cleaned_data["address"],
                 "username": form.cleaned_data["username"],
 
                 "password": form.cleaned_data["password"]
@@ -2990,6 +2993,11 @@ def setup(request):
 
     )
 def setup_verify(request):
+    status = InstallationStatus.objects.first()
+
+    if status and status.is_completed:
+
+        return redirect("login")
 
     if "setup_data" not in request.session:
 
@@ -3039,10 +3047,8 @@ def setup_verify(request):
 
             return redirect("setup_verify")
 
-        data = request.session["setup_data"]
-
         with transaction.atomic():
-
+            data = request.session["setup_data"]
             user = User.objects.create_superuser(
 
                 username=data["username"],
@@ -3064,26 +3070,33 @@ def setup_verify(request):
                 mobile_number=data["mobile"]
 
     )
+            ShopSettings.objects.create(
+        
+        shop_name=data["shop_name"],
+        drug_license_number=data["drug_license_number"],
+        owner_name=f"{data['owner_first_name']} {data['owner_last_name']}",
+        gst_number=data["gst_number"],
+
+        email=data["email"],
+
+        mobile_number=data["mobile"],
+        address=data["address"],
+        address=data["address"],
+        gst_number=""
+
+    )
 
             InstallationStatus.objects.create(
 
                 is_completed=True,
 
-                shop_name=data["shop_name"],
-
-                owner_name=f"{data['owner_first_name']} {data['owner_last_name']}",
-
-                owner_email=data["email"]
+                current_version="1.0.0"
 
     )
+            record.delete()
+            login(request, user)
 
-            record.is_verified = True
-
-            record.save()
-
-        login(request, user)
-
-        del request.session["setup_data"]
+            del request.session["setup_data"]
 
         messages.success(request,"Medical Shop ERP installed successfully.")
 
@@ -3116,10 +3129,11 @@ def home(request):
 
         return redirect("setup")
 
+    if request.user.is_authenticated:
+
+        return redirect("dashboard")
+
     return redirect("login")
-from .services import InstallationService
-from django.contrib import messages
-from django.shortcuts import redirect
 
 def setup_resend_otp(request):
 
