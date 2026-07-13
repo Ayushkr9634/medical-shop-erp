@@ -3081,7 +3081,6 @@ def setup_verify(request):
 
         mobile_number=data["mobile"],
         address=data["address"],
-        address=data["address"],
 
     )
 
