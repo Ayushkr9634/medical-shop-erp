@@ -1,5 +1,7 @@
 from .services import send_email, InstallationService
 import random
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import InstallationStatus
 from .forms import SetupForm
 from django.utils import timezone
@@ -44,7 +46,19 @@ from functools import wraps
 from .forms import UserEditForm
 from .services import send_email
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.views import LoginView
 
+class CustomLoginView(LoginView):
+
+    template_name = "registration/login.html"
+
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+
+            return redirect("dashboard")
+
+        return super().dispatch(request, *args, **kwargs)
 def reset_password(request):
 
     if not request.session.get("otp_verified"):
@@ -273,6 +287,7 @@ from django.shortcuts import (
     render,
     redirect,get_object_or_404
 )
+@never_cache
 @login_required
 def dashboard(request):
 
@@ -400,6 +415,7 @@ def dashboard(request):
         'inventory/dashboard.html',
         context
     )
+@never_cache
 @login_required
 def medicine_list(request):
 
@@ -507,6 +523,7 @@ def medicine_list(request):
             'medicines': medicines
         }
     )
+@never_cache
 @login_required
 def supplier_list(request):
 
@@ -602,8 +619,8 @@ def supplier_list(request):
         'suppliers': suppliers
     }
 )
-
-
+@never_cache
+@login_required
 def supplier_add(request):
 
     if request.method == 'POST':
@@ -631,6 +648,8 @@ def supplier_add(request):
             'form': form
         }
     )
+@never_cache
+@login_required
 def supplier_edit(request, pk):
 
     supplier = get_object_or_404(
@@ -666,6 +685,7 @@ def supplier_edit(request, pk):
             'form': form
         }
     )
+@never_cache
 @login_required
 def purchase_list(request):
 
@@ -770,6 +790,7 @@ def purchase_list(request):
             'purchases': purchases
         }
     )
+@never_cache
 @login_required
 def sale_list(request):
 
@@ -869,6 +890,8 @@ Q(customer_mobile__icontains=query)
             'sales': sales
         }
     )
+@never_cache
+@login_required
 def medicine_add(request):
 
     if request.method == 'POST':
@@ -896,6 +919,8 @@ def medicine_add(request):
             'form': form
         }
     )
+@never_cache
+@login_required
 def medicine_edit(request, pk):
 
     medicine = get_object_or_404(
@@ -931,6 +956,8 @@ def medicine_edit(request, pk):
             'form': form
         }
     )
+@never_cache
+@login_required
 def medicine_delete(request, pk):
 
     medicine = get_object_or_404(
@@ -953,6 +980,8 @@ def medicine_delete(request, pk):
             'medicine': medicine
         }
     )
+@never_cache
+@login_required
 def supplier_delete(request, pk):
 
     supplier = get_object_or_404(
@@ -975,6 +1004,8 @@ def supplier_delete(request, pk):
             'supplier': supplier
         }
     )
+@never_cache
+@login_required
 def purchase_add(request):
 
     if request.method == 'POST':
@@ -1002,6 +1033,8 @@ def purchase_add(request):
             'form': form
         }
     )
+@never_cache
+@login_required
 def purchase_item_add(request):
 
     if request.method == 'POST':
@@ -1029,6 +1062,7 @@ def purchase_item_add(request):
             'form': form
         }
     )
+@never_cache
 @login_required
 def purchase_item_list(request):
     if request.user.groups.filter(
@@ -1057,6 +1091,8 @@ def purchase_item_list(request):
             'items': items
         }
     )
+@never_cache
+@login_required
 def purchase_item_delete(request, pk):
 
     item = get_object_or_404(
@@ -1083,6 +1119,8 @@ def purchase_item_delete(request, pk):
             'item': item
         }
     )
+@never_cache
+@login_required
 def sale_add(request):
 
     if request.method == 'POST':
@@ -1110,6 +1148,8 @@ def sale_add(request):
             'form': form
         }
     )
+@never_cache
+@login_required
 def sale_item_add(request):
 
     if request.method == 'POST':
@@ -1137,6 +1177,7 @@ def sale_item_add(request):
             'form': form
         }
     )
+@never_cache
 @login_required
 def sale_item_list(request):
 
@@ -1177,6 +1218,8 @@ def sale_item_list(request):
             'items': items
         }
     )
+@never_cache
+@login_required
 def sale_item_delete(request, pk):
 
     item = get_object_or_404(
@@ -1203,6 +1246,8 @@ def sale_item_delete(request, pk):
             'item': item
         }
     )
+@never_cache
+@login_required
 def sale_detail(request, pk):
 
     sale = get_object_or_404(
@@ -1231,6 +1276,8 @@ def sale_detail(request, pk):
         'shop': shop
         }
     )
+@never_cache
+@login_required
 def purchase_detail(request, pk):
 
     purchase = get_object_or_404(
@@ -1264,6 +1311,8 @@ def purchase_detail(request, pk):
             'total': total
         }
     )
+@never_cache
+@login_required
 def purchase_delete(request, pk):
 
     purchase = get_object_or_404(
@@ -1292,6 +1341,8 @@ def purchase_delete(request, pk):
             'purchase': purchase
         }
     )
+@never_cache
+@login_required
 def sale_delete(request, pk):
 
     sale = get_object_or_404(
@@ -1320,6 +1371,8 @@ def sale_delete(request, pk):
             'sale': sale
         }
     )
+@never_cache
+@login_required
 def stock_transaction_list(request):
 
     query = request.GET.get('q')
@@ -1383,6 +1436,8 @@ def stock_transaction_list(request):
             'transactions': transactions
         }
     )
+@never_cache
+@login_required
 def shop_settings(request):
 
     settings_obj, created = ShopSettings.objects.get_or_create(
@@ -1667,6 +1722,7 @@ def user_list(request):
         }
 
     )
+@never_cache
 @login_required
 @admin_required
 def toggle_user_status(request, pk):
@@ -1753,6 +1809,7 @@ def toggle_user_status(request, pk):
     return redirect(
         "user_list"
     )
+@never_cache
 @admin_required
 @login_required
 def user_add(request):
@@ -2060,6 +2117,8 @@ def is_admin(user):
     return user.groups.filter(
         name='Admin'
     ).exists()
+@never_cache
+@login_required
 def user_change_password(request, pk):
 
     if not is_admin(request.user):
@@ -2139,6 +2198,8 @@ def user_change_password(request, pk):
             'user_obj': user
         }
     )
+@never_cache
+@login_required
 def activity_logs(request):
 
     if not is_admin(request.user):
@@ -2164,6 +2225,7 @@ def activity_logs(request):
             'logs': logs
         }
     )
+@never_cache
 @login_required
 def profile(request):
 
@@ -2174,6 +2236,8 @@ def profile(request):
             'user_obj': request.user
         }
     )
+@never_cache
+@login_required
 def system_information(request):
 
     if not is_admin(request.user):
@@ -2218,6 +2282,7 @@ def get_role(user):
         return group.name
 
     return None
+@never_cache
 @login_required
 def adjust_stock(
     request,
@@ -2308,6 +2373,7 @@ def adjust_stock(
             'medicine': medicine,
         }
     )
+@never_cache
 @login_required
 def undo_stock_transaction(request, id):
 
@@ -3063,38 +3129,34 @@ def setup_verify(request):
 
     )
 
-            UserProfile.objects.create(
+            UserProfile.objects.get_or_create(
+    user=user,
+    defaults={
+        "mobile_number": data["mobile"],
+    },
+)
+            ShopSettings.objects.update_or_create(
+        id=1, defaults={
+        "shop_name": data["shop_name"],
+        "drug_license_number": data["drug_license_number"],
+        "gst_number": data["gst_number"],
+        "mobile": data["mobile"],
+        "email": data["email"],
+        "address": data["address"],
 
-                user=user,
+    })
 
-                mobile_number=data["mobile"]
-
-    )
-            ShopSettings.objects.create(
-        
-        shop_name=data["shop_name"],
-        drug_license_number=data["drug_license_number"],
-        owner_name=f"{data['owner_first_name']} {data['owner_last_name']}",
-        gst_number=data["gst_number"],
-
-        email=data["email"],
-
-        mobile_number=data["mobile"],
-        address=data["address"],
-
-    )
-
-            InstallationStatus.objects.create(
-
-                is_completed=True,
-
-                current_version="1.0.0"
-
-    )
+            InstallationStatus.objects.update_or_create(
+    id=1,
+    defaults={
+        "is_completed": True,
+        "current_version": "1.0.0",
+    },
+)
             record.delete()
             login(request, user)
 
-            del request.session["setup_data"]
+            request.session.pop("setup_data", None)
 
         messages.success(request,"Medical Shop ERP installed successfully.")
 

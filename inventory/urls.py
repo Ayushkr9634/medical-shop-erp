@@ -1,5 +1,9 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.db import transaction
 from .views import (
     dashboard,adjust_stock,undo_stock_transaction,toggle_user_status,
     medicine_list,restore_database,user_add,user_delete,
@@ -10,7 +14,7 @@ from .views import (
     forgot_password,test_email,setup_verify,setup_resend_otp,
     verify_otp,email_settings,home,
     reset_password,resend_otp,setup
-    ,supplier_delete,purchase_add,
+    ,supplier_delete,purchase_add,CustomLoginView,
     purchase_item_add,purchase_item_list,
     purchase_item_delete,sale_add,sale_item_add,
     sale_item_list,sale_item_delete,sale_detail,purchase_detail,purchase_delete,sale_delete,stock_transaction_list,shop_settings,backup_database
@@ -235,7 +239,7 @@ urlpatterns = [
     
     path(
     "login/",
-    auth_views.LoginView.as_view(),
+    CustomLoginView.as_view(),
     name="login"
 ),
     path(
