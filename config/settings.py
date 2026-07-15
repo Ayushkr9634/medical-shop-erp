@@ -215,3 +215,26 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
     SECURE_HSTS_PRELOAD = True
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "standard": {
+            "format": "[{asctime}] {levelname} {name}: {message}",
+            "style": "{",
+        },
+    },
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+    },
+
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}

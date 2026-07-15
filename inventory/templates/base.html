@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>Medical Shop Management</title>
@@ -247,6 +248,7 @@ color:#2563eb;
         .content {
     flex:1;
     padding:30px;
+    overflow-x:auto;
 }
         @media print {
 
@@ -367,6 +369,9 @@ color:#2563eb;
 </head>
 
 <body>
+    <button class="mobile-menu" onclick="toggleSidebar()">
+    ☰ Menu
+</button>
 {% with role=request.user.groups.first.name %}
 <div class="sidebar">
 
@@ -457,6 +462,7 @@ font-weight:600;
 
 </div>
 <script>
+
 function togglePassword(id, icon){
 
     const input=document.getElementById(id);
@@ -484,8 +490,13 @@ function togglePassword(id, icon){
     }
 
 }
-</script>
 
-</body>
+function toggleSidebar(){
+
+    document.querySelector(".sidebar").classList.toggle("active");
+
+}
+
+</script>
 </body>
 </html>
