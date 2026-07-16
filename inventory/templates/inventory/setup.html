@@ -584,7 +584,14 @@ Email Address
 </label>
 
 {{ form.email }}
-
+<div
+id="email-status"
+style="
+margin-top:6px;
+font-size:14px;
+font-weight:600;
+">
+</div>
 </div>
 
 <div class="form-group">
@@ -642,7 +649,14 @@ Admin Username
 </label>
 
 {{ form.username }}
-
+<div
+id="username-status"
+style="
+margin-top:6px;
+font-size:14px;
+font-weight:600;
+">
+</div>
 </div>
 
 <div class="form-group full">
@@ -984,8 +998,175 @@ this.style.transition=".25s";
 
 });
 
-</script>
 
+</script>
+<script>
+const usernameInput =
+document.getElementById("id_username");
+
+const emailInput =
+document.getElementById("id_email");
+
+const usernameStatus =
+document.getElementById("username-status");
+
+const emailStatus =
+document.getElementById("email-status");
+
+const submitButton =
+document.querySelector(
+'button[type="submit"]'
+);
+
+let usernameValid = false;
+let emailValid = false;
+
+function updateSubmitButton(){
+
+    submitButton.disabled =
+    !(usernameValid && emailValid);
+
+}
+
+function checkUsername(){
+
+    const username =
+    usernameInput.value.trim();
+
+    if(username===""){
+
+        usernameStatus.innerHTML="";
+
+        usernameValid=false;
+
+        updateSubmitButton();
+
+        return;
+
+    }
+
+    fetch(
+
+        "/check-username/?username="+
+        encodeURIComponent(username)
+
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.exists){
+
+            usernameStatus.innerHTML=
+            "<span style='color:red'>Username already exists</span>";
+
+            usernameValid=false;
+
+        }
+
+        else{
+
+            usernameStatus.innerHTML=
+            "<span style='color:green'>Username available</span>";
+
+            usernameValid=true;
+
+        }
+
+        updateSubmitButton();
+
+    });
+
+}
+
+function checkEmail(){
+
+    const email =
+    emailInput.value.trim();
+
+    if(email===""){
+
+        emailStatus.innerHTML="";
+
+        emailValid=false;
+
+        updateSubmitButton();
+
+        return;
+
+    }
+
+    fetch(
+
+        "/check-email/?email="+
+        encodeURIComponent(email)
+
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.exists){
+
+            emailStatus.innerHTML=
+            "<span style='color:red'>Email already exists</span>";
+
+            emailValid=false;
+
+        }
+
+        else{
+
+            emailStatus.innerHTML=
+            "<span style='color:green'>Email available</span>";
+
+            emailValid=true;
+
+        }
+
+        updateSubmitButton();
+
+    });
+
+}
+
+let usernameTimer;
+let emailTimer;
+
+usernameInput.addEventListener(
+
+    "input",
+
+    function(){
+
+        clearTimeout(usernameTimer);
+
+        usernameTimer =
+        setTimeout(checkUsername,400);
+
+    }
+
+);
+
+emailInput.addEventListener(
+
+    "input",
+
+    function(){
+
+        clearTimeout(emailTimer);
+
+        emailTimer =
+        setTimeout(checkEmail,400);
+
+    }
+
+);
+
+updateSubmitButton();
+</script>
 </body>
 
 </html>

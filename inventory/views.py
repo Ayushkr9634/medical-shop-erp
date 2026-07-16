@@ -2944,7 +2944,60 @@ def setup(request):
         form = SetupForm(request.POST)
 
         if form.is_valid():
+            if User.objects.filter(
 
+                username__iexact=form.cleaned_data["username"]
+
+).exists():
+
+                messages.error(
+
+        request,
+
+        "Username already exists."
+
+    )
+
+                return render(
+
+        request,
+
+        "inventory/setup.html",
+
+        {
+
+            "form": form
+
+        }
+
+    )
+            if User.objects.filter(
+
+    email__iexact=form.cleaned_data["email"]
+
+).exists():
+
+                messages.error(
+
+        request,
+
+        "Email already exists."
+
+    )
+
+                return render(
+
+        request,
+
+        "inventory/setup.html",
+
+        {
+
+            "form": form
+
+        }
+
+    )
             request.session["setup_data"] = {
 
                 "shop_name": form.cleaned_data["shop_name"],
@@ -3170,3 +3223,34 @@ def setup_resend_otp(request):
         )
 
     return redirect("setup_verify")
+from django.http import JsonResponse
+def check_username(request):
+
+    username = request.GET.get(
+        "username",
+        ""
+    ).strip()
+
+    exists = User.objects.filter(
+        username__iexact=username
+    ).exists()
+
+    return JsonResponse({
+        "exists": exists
+    })
+def check_email(request):
+
+    email = request.GET.get(
+        "email",
+        ""
+    ).strip()
+
+    exists = User.objects.filter(
+        email__iexact=email
+    ).exists()
+
+    return JsonResponse({
+
+        "exists": exists
+
+    })

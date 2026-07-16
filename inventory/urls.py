@@ -13,7 +13,7 @@ from .views import (
     medicine_edit,medicine_delete,supplier_add,supplier_edit,forgot_username,
     forgot_password,test_email,setup_verify,setup_resend_otp,
     verify_otp,email_settings,home,
-    reset_password,resend_otp,setup
+    reset_password,resend_otp,setup,check_username,check_email
     ,supplier_delete,purchase_add,CustomLoginView,
     purchase_item_add,purchase_item_list,
     purchase_item_delete,sale_add,sale_item_add,
@@ -27,7 +27,16 @@ urlpatterns = [
         dashboard,
         name='dashboard'
     ),
-
+    path(
+    "check-username/",
+    check_username,
+    name="check_username",
+),
+    path(
+    "check-email/",
+    check_email,
+    name="check_email",
+),
     path(
         'dashboard/medicines/',
         medicine_list,
