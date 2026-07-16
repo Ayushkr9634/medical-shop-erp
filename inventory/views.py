@@ -1,5 +1,6 @@
 from .services import send_email, InstallationService
 import random
+
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import InstallationStatus
@@ -3082,10 +3083,16 @@ def setup_verify(request):
 
                 first_name=data["owner_first_name"],
 
-                last_name=data["owner_last_name"]
+                last_name=data["owner_last_name"])
+            admin_group, created = Group.objects.get_or_create(
 
-    )
+                name="Admin"
 
+)
+
+            user.groups.add(admin_group)
+
+            user.save()
             UserProfile.objects.get_or_create(
     user=user,
     defaults={

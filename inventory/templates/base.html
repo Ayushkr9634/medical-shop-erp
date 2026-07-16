@@ -470,13 +470,12 @@ onclick="toggleSidebar()">
 
 </button>
 
-{% with role=request.user.groups.first.name %}
+{% with role=request.user.groups.first%}
 <div class="sidebar">
 
     <h2>Medical Shop</h2>
-    {% if request.user.groups.first.name == 'Admin' %}
-
-{% if role == 'Admin' %}
+{% if request.user.is_superuser %}
+{% if role and role.name == 'Admin' %}
 <a href="/dashboard/system-settings/">
     Settings
 </a>
@@ -487,7 +486,7 @@ onclick="toggleSidebar()">
     <a href="/dashboard/profile/">
     My Profile
 </a>
-    {% if role == 'Admin' or role == 'Pharmacist' %}
+{% if role and role.name == 'Admin' or role and role.name == 'Pharmacist' %}
 <a href="/dashboard/medicines/">
     Medicines
 </a>
