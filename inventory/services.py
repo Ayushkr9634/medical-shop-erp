@@ -21,6 +21,7 @@ def send_email(
     try:
 
         response = requests.post(
+            
 
             "https://api.brevo.com/v3/smtp/email",
 
@@ -59,28 +60,10 @@ def send_email(
             timeout=15
 
         )
-
-        if response.status_code not in [200,201]:
-
-            EmailLog.objects.create(
-
-                recipient=recipient,
-
-                subject=subject,
-
-                status="FAILED",
-
-                error=response.text
-
-            )
-
-            return (
-
-                False,
-
-                response.text
-
-            )
+        print("STATUS:", response.status_code)
+        print("BODY:", response.text)
+        if response.status_code not in (200, 201):
+            raise Exception(f"Brevo {response.status_code}: {response.text}")
 
         EmailLog.objects.create(
 
