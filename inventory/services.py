@@ -1,5 +1,6 @@
 import smtplib
 from django.conf import settings
+from django.core.mail import send_mail
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -148,9 +149,7 @@ class InstallationService:
 
         )
 
-        success, msg = send_email(
-
-            recipient=email,
+        send_mail(
 
             subject="Medical Shop ERP Installation OTP",
 
@@ -162,12 +161,14 @@ Your OTP is
 
 Valid for 5 minutes.
 
-"""
+""",
 
-)
+            from_email=settings.DEFAULT_FROM_EMAIL,
 
-        if not success:
+            recipient_list=[email],
 
-            raise Exception(msg)
+            fail_silently=False,
+
+        )
 
         return True
