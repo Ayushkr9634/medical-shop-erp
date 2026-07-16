@@ -2939,12 +2939,6 @@ Valid for 5 minutes.
     )
 def setup(request):
 
-    status = InstallationStatus.objects.first()
-
-    if status and status.is_completed:
-
-        return redirect("login")
-
     if request.method == "POST":
 
         form = SetupForm(request.POST)
@@ -3142,22 +3136,7 @@ def setup_verify(request):
 
     )
 def home(request):
-
-    status = InstallationStatus.objects.first()
-
-    if not status:
-
-        return redirect("setup")
-
-    if not status.is_completed:
-
-        return redirect("setup")
-
-    if request.user.is_authenticated:
-
-        return redirect("dashboard")
-
-    return redirect("login")
+    return redirect("setup")
 
 def setup_resend_otp(request):
 
