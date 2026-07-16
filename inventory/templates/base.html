@@ -11,36 +11,216 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     href="{% static 'css/style.css' %}"
 >
     <style>
+        .filter-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+        .password-box{
 
-body{
+position:relative;
+
+width:100%;
+
+}
+
+.password-box input{
+
+width:100%;
+
+padding-right:45px;
+
+box-sizing:border-box;
+
+}
+
+.toggle-password{
+
+position:absolute;
+
+right:15px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+color:#6b7280;
+
+font-size:18px;
+
+transition:.2s;
+
+}
+
+.toggle-password:hover{
+
+color:#2563eb;
+
+}
+        .filter-grid label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:600;
+}
+
+        .filter-grid input,
+        .filter-grid select{
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+        .reset-btn{
+    background:#6b7280;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    margin-left:10px;
+}
+        .action-btn{
+    background:#2563eb;
+    color:white;
+    padding:6px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}       
+        .action-btn{
+    background:#2563eb;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    margin-right:5px;
+}
+
+        .delete-btn{
+    background:#dc3545;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+}
+
+        .delete-btn:hover{
+    background:#bb2d3b;
+}
+        .search-filter-form{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+        .search-box{
+    width:300px;
+}
+
+        .filter-select{
+    min-width:180px;
+}
+
+        .search-filter-form button{
+    margin:0;
+}
+        .filter-select{
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    margin-left:10px;
+    background:white;
+    min-width:180px;
+}
+        .action-btn-stock{
+    background:#fd7e14;
+    color:white;
+    padding:6px 10px;
+    border-radius:6px;
+    text-decoration:none;
+}
+        .toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+        .search-box{
+    width:350px;
+    padding:10px 15px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+}
+        .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+        .add-btn{
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:8px;
+    font-weight:600;
+    
+}
+
+        .add-btn:hover{
+    background:#1d4ed8;
+}       
+        .page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+        .header-buttons{
+    display:flex;
+    gap:10px;
+}
+
+        .toolbar{
+    margin-top:15px;
+    margin-bottom:20px;
+}
+        body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#f4f6f9;
 }
 
-.mobile-menu{
-    display:none;
-    position:fixed;
-    top:15px;
-    left:15px;
-    width:45px;
-    height:45px;
-    border:none;
-    border-radius:8px;
-    background:#2563eb;
-    color:#fff;
-    font-size:20px;
-    cursor:pointer;
-    z-index:2000;
+.wrapper{
+    display:flex;
+    min-height:100vh;
 }
+        .alert-success{
+    background:#d1e7dd;
+    color:#0f5132;
+}       
+        .alert-danger{
+    background:#f8d7da;
+    color:#842029;
+}
+        
 
+        
+
+        
 .sidebar{
 
     position:fixed;
 
-    left:-260px;
-
     top:0;
+
+    left:0;
 
     width:250px;
 
@@ -50,25 +230,21 @@ body{
 
     color:white;
 
-    overflow-y:auto;
-
     padding:20px;
 
     box-sizing:border-box;
 
-    transition:.3s;
+    overflow-y:auto;
 
-    z-index:1500;
+    transition:left .3s ease;
+
+    z-index:1000;
+
+    box-shadow:2px 0 10px rgba(0,0,0,.2);
 
 }
-.sidebar.active{
 
-    left:0;
-
-}
 .sidebar h2{
-
-    margin-top:10px;
 
     margin-bottom:30px;
 
@@ -82,11 +258,11 @@ body{
 
     text-decoration:none;
 
-    padding:12px;
-
-    border-radius:8px;
+    padding:12px 15px;
 
     margin-bottom:8px;
+
+    border-radius:8px;
 
 }
 
@@ -96,47 +272,34 @@ body{
 
 }
 
-.content{
+        .content{
 
     margin-left:250px;
 
     padding:25px;
 
-    min-height:100vh;
+    width:calc(100% - 250px);
+
+    transition:.3s;
 
     box-sizing:border-box;
 
-    overflow-x:auto;
-
 }
+.mobile-menu{
 
-table{
+    display:none;
 
-    width:100%;
+    position:fixed;
 
-    border-collapse:collapse;
+    top:15px;
 
-    background:white;
+    left:15px;
 
-}
+    width:45px;
 
-th{
+    height:45px;
 
-    background:#f8fafc;
-
-    padding:12px;
-
-}
-
-td{
-
-    padding:12px;
-
-    border-top:1px solid #e5e7eb;
-
-}
-
-button{
+    z-index:2000;
 
     background:#2563eb;
 
@@ -144,90 +307,156 @@ button{
 
     border:none;
 
-    padding:10px 16px;
-
     border-radius:8px;
+
+    font-size:20px;
 
     cursor:pointer;
 
 }
+        @media print {
 
-input,
-select,
-textarea{
+    .sidebar {
+        display: none;
+    }
 
-    width:100%;
-
-    padding:10px;
-
-    border:1px solid #d1d5db;
-
-    border-radius:8px;
-
-    box-sizing:border-box;
+    
 
 }
 
+@media print {
+
+    .no-print {
+        display: none;
+    }
+
+}
+@media print {
+
+    .sidebar {
+        display: none;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+}
+@media print {
+
+    .sidebar {
+        display: none;
+    }
+
+    .no-print {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+}
+    table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+    th{
+    background:#f8fafc;
+    padding:14px;
+    text-align:left;
+}
+
+    td{
+    padding:12px;
+    border-top:1px solid #e5e7eb;
+}
+
+    tr:hover{
+    background:#f9fafb;
+}
+    button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+    button:hover{
+    background:#1d4ed8;
+}
+    input,
+    select,
+    textarea{
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+}
+
+    input:focus,
+    select:focus,
+    textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+}
 @media(max-width:768px){
 
-.mobile-menu{
+    .sidebar{
 
-display:block;
+        left:-260px;
 
-}
+    }
 
-.sidebar{
+    .sidebar.active{
 
-left:-260px;
+        left:0;
 
-}
+    }
 
-.sidebar.active{
+    .content{
 
-left:0;
+        margin-left:0;
 
-}
+        width:100%;
 
-.content{
+        padding:70px 15px 20px;
 
-margin-left:0;
+    }
 
-padding:75px 15px 20px;
+    .mobile-menu{
 
-}
+        display:block;
 
-table{
-
-display:block;
-
-overflow-x:auto;
-
-white-space:nowrap;
+    }
 
 }
-
-}
-
-@media print{
-
-.mobile-menu,
-.sidebar,
-.no-print{
-
-display:none;
-
-}
-
-.content{
-
-margin:0;
-
-padding:0;
-
-}
-
-}
-
     </style>
 </head>
 
@@ -242,7 +471,8 @@ onclick="toggleSidebar()">
 </button>
 
 {% with role=request.user.groups.first.name %}
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
+
     <h2>Medical Shop</h2>
     {% if request.user.groups.first.name == 'Admin' %}
 
@@ -301,21 +531,9 @@ Logged in as:
     </button>
 </form>
 </div>
-<div
-id="sidebarOverlay"
-style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.45);
-z-index:1400;
-"
-onclick="toggleSidebar()">
 {% endwith %}
-<div class="content" id="content">
+<div class="content">
+
     {% if messages %}
 
         {% for message in messages %}
@@ -373,51 +591,11 @@ function togglePassword(id, icon){
 
 function toggleSidebar(){
 
-    const sidebar=document.getElementById("sidebar");
+    const sidebar=document.querySelector(".sidebar");
 
-    const overlay=document.getElementById("sidebarOverlay");
-
-    if(sidebar.classList.contains("active")){
-
-        sidebar.classList.remove("active");
-
-        overlay.style.display="none";
-
-    }
-
-    else{
-
-        sidebar.classList.add("active");
-
-        overlay.style.display="block";
-
-    }
+    sidebar.classList.toggle("active");
 
 }
-
-window.addEventListener("resize",function(){
-
-    if(window.innerWidth>768){
-
-        document.getElementById("sidebar").classList.remove("active");
-
-        document.getElementById("sidebarOverlay").style.display="none";
-
-    }
-
-});
-
-document.addEventListener("keydown",function(e){
-
-    if(e.key==="Escape"){
-
-        document.getElementById("sidebar").classList.remove("active");
-
-        document.getElementById("sidebarOverlay").style.display="none";
-
-    }
-
-});
 
 </script>
 </body>
