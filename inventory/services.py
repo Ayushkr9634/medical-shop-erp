@@ -60,10 +60,28 @@ def send_email(
             timeout=15
 
         )
-        print("STATUS:", response.status_code)
-        print("BODY:", response.text)
-        if response.status_code not in (200, 201):
-            raise Exception(f"Brevo {response.status_code}: {response.text}")
+        
+        if response.status_code not in [200,201]:
+
+            EmailLog.objects.create(
+
+                recipient=recipient,
+
+                subject=subject,
+
+                status="FAILED",
+
+                error=response.text
+
+            )
+
+            return (
+
+                False,
+
+                response.text
+
+            )
 
         EmailLog.objects.create(
 
