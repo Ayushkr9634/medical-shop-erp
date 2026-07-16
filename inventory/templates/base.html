@@ -191,12 +191,16 @@ color:#2563eb;
     margin-top:15px;
     margin-bottom:20px;
 }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            background: #f4f6f9;
-        }
+        body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+}
+
+.wrapper{
+    display:flex;
+    min-height:100vh;
+}
         .alert-success{
     background:#d1e7dd;
     color:#0f5132;
@@ -245,10 +249,43 @@ color:#2563eb;
     transition:.2s;
 }
 
-        .content {
+        .content{
+
     flex:1;
-    padding:30px;
+
+    margin-left:250px;
+
+    padding:25px;
+
     overflow-x:auto;
+
+    transition:.3s;
+
+}
+.mobile-menu{
+
+    display:none;
+
+    position:fixed;
+
+    top:15px;
+
+    left:15px;
+
+    z-index:1100;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 14px;
+
+    border-radius:8px;
+
+    font-size:18px;
+
 }
         @media print {
 
@@ -256,13 +293,10 @@ color:#2563eb;
         display: none;
     }
 
-    .content {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
+    
 
 }
+
 @media print {
 
     .no-print {
@@ -365,13 +399,65 @@ color:#2563eb;
     outline:none;
     border-color:#2563eb;
 }
+@media(max-width:768px){
+
+.sidebar{
+
+    left:-270px;
+
+}
+
+.sidebar.active{
+
+    left:0;
+
+}
+
+.content{
+
+    margin-left:0;
+
+    padding:70px 15px 20px;
+
+}
+
+.mobile-menu{
+
+    display:block;
+
+}
+
+.dashboard-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+table{
+
+    display:block;
+
+    overflow-x:auto;
+
+    white-space:nowrap;
+
+}
+
+}
     </style>
 </head>
 
 <body>
-    <button class="mobile-menu" onclick="toggleSidebar()">
-    ☰ Menu
+
+<button
+class="mobile-menu"
+onclick="toggleSidebar()">
+
+<i class="fa fa-bars"></i>
+
 </button>
+
+<div class="wrapper">
 {% with role=request.user.groups.first.name %}
 <div class="sidebar">
 
@@ -461,6 +547,7 @@ font-weight:600;
     {% endblock %}
 
 </div>
+</div>
 <script>
 
 function togglePassword(id, icon){
@@ -493,9 +580,30 @@ function togglePassword(id, icon){
 
 function toggleSidebar(){
 
-    document.querySelector(".sidebar").classList.toggle("active");
+    document
+    .querySelector(".sidebar")
+    .classList
+    .toggle("active");
 
 }
+
+document.addEventListener("click",function(e){
+
+    if(window.innerWidth<=768){
+
+        const sidebar=document.querySelector(".sidebar");
+
+        const menu=document.querySelector(".mobile-menu");
+
+        if(!sidebar.contains(e.target) && !menu.contains(e.target)){
+
+            sidebar.classList.remove("active");
+
+        }
+
+    }
+
+});
 
 </script>
 </body>
