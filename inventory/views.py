@@ -3064,12 +3064,7 @@ def setup(request):
 
     )
 def setup_verify(request):
-    status = InstallationStatus.objects.first()
-
-    if status and status.is_completed:
-
-        return redirect("login")
-
+    
     if "setup_data" not in request.session:
 
         messages.error(
@@ -3157,13 +3152,7 @@ def setup_verify(request):
 
     })
 
-            InstallationStatus.objects.update_or_create(
-    id=1,
-    defaults={
-        "is_completed": True,
-        "current_version": "1.0.0",
-    },
-)
+            
             record.delete()
             login(request, user)
 
