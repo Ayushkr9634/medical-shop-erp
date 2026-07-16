@@ -474,7 +474,8 @@ onclick="toggleSidebar()">
 <div class="sidebar">
 
     <h2>Medical Shop</h2>
-{% if request.user.is_superuser %}
+    {% if request.user.groups.first.name == 'Admin' %}
+
 {% if role and role.name == 'Admin' %}
 <a href="/dashboard/system-settings/">
     Settings
@@ -486,19 +487,19 @@ onclick="toggleSidebar()">
     <a href="/dashboard/profile/">
     My Profile
 </a>
-{% if role and role.name == 'Admin' or role and role.name == 'Pharmacist' %}
+    {% if role and role.name == 'Admin' or role and role.name == 'Pharmacist' %}
 <a href="/dashboard/medicines/">
     Medicines
 </a>
 {% endif %}
 
-    {% if role == 'Admin' or role == 'Pharmacist' %}
+{% if role and role.name == 'Admin' or role and role.name == 'Pharmacist' %}
 <a href="/dashboard/suppliers/">
     Suppliers
 </a>
 {% endif %}
 
-    {% if role == 'Admin' or role == 'Pharmacist' %}
+{% if role and role.name == 'Admin' or role and role.name == 'Pharmacist' %}
 <a href="/dashboard/purchases/">
     Purchases
 </a>
