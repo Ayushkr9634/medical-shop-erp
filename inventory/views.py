@@ -2771,45 +2771,18 @@ def email_settings(request):
 @admin_required
 def test_email(request):
 
-    config = EmailSettings.objects.filter(
-        is_active=True
-    ).first()
-
-    if not config:
-
-        messages.error(
-
-            request,
-
-            "No active email configuration found."
-
-        )
-
-        return redirect(
-
-            "email_settings"
-
-        )
-
     success, message = send_email(
 
-        recipient=config.sender_email,
+        recipient=request.user.email,
 
         subject="Medical Shop ERP - Test Email",
 
         message="""
 Congratulations!
 
-Your Email Configuration is working successfully.
+Your Brevo Email API is working successfully.
 
 This email was sent from your Medical Shop ERP.
-
-You can now use:
-
-• Forgot Password
-• Forgot Username
-• OTP Verification
-• Future Notifications
 
 Regards,
 Medical Shop ERP
@@ -2819,29 +2792,13 @@ Medical Shop ERP
 
     if success:
 
-        messages.success(
-
-            request,
-
-            message
-
-        )
+        messages.success(request, message)
 
     else:
 
-        messages.error(
+        messages.error(request, message)
 
-            request,
-
-            message
-
-        )
-
-    return redirect(
-
-        "email_settings"
-
-    )
+    return redirect("email_settings")
 def resend_otp(request):
 
     email = request.session.get("reset_email")
