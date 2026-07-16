@@ -1,8 +1,6 @@
-import smtplib
+import requests
 from django.conf import settings
-from django.core.mail import send_mail
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+
 
 from .models import EmailSettings, EmailLog
 import random
@@ -20,73 +18,69 @@ def send_email(
     message
 ):
 
-    config = EmailSettings.objects.filter(
-        is_active=True
-    ).first()
-
-    if not config:
-
-        return (
-            False,
-            "No active email configuration found."
-        )
-
     try:
 
-        email = MIMEMultipart()
+        response = requests.post(
 
-        email["From"] = (
-            f"{config.sender_name} <{config.sender_email}>"
+            "https://api.brevo.com/v3/smtp/email",
+
+            headers={
+
+                "accept":"application/json",
+
+                "api-key":settings.BREVO_API_KEY,
+
+                "content-type":"application/json"
+
+            },
+
+            json={
+"sender": {
+    "name": settings.DEFAULT_FROM_NAME,
+    "email": settings.DEFAULT_FROM_EMAIL
+},
+
+                "to":[
+
+                    {
+
+                        "email":recipient
+
+                    }
+
+                ],
+
+                "subject":subject,
+
+                "textContent":message
+
+            },
+
+            timeout=15
+
         )
 
-        email["To"] = recipient
+        if response.status_code not in [200,201]:
 
-        email["Subject"] = subject
+            EmailLog.objects.create(
 
-        email.attach(
-            MIMEText(
-                message,
-                "plain"
+                recipient=recipient,
+
+                subject=subject,
+
+                status="FAILED",
+
+                error=response.text
+
             )
-        )
 
-        if config.use_ssl:
+            return (
 
-            server = smtplib.SMTP_SSL(
-                config.smtp_host,
-                config.smtp_port
+                False,
+
+                response.text
+
             )
-
-        else:
-
-            server = smtplib.SMTP(
-                config.smtp_host,
-                config.smtp_port
-            )
-
-            if config.use_tls:
-
-                server.starttls()
-
-        server.login(
-
-            config.username,
-
-            config.password
-
-        )
-
-        server.sendmail(
-
-            config.sender_email,
-
-            recipient,
-
-            email.as_string()
-
-        )
-
-        server.quit()
 
         EmailLog.objects.create(
 
@@ -95,6 +89,7 @@ def send_email(
             subject=subject,
 
             status="SUCCESS",
+
             error=""
 
         )
@@ -103,7 +98,7 @@ def send_email(
 
             True,
 
-            "Email sent successfully."
+            "Email Sent Successfully"
 
         )
 
@@ -145,11 +140,13 @@ class InstallationService:
 
             otp=otp,
 
-            expires_at=timezone.now() + timedelta(minutes=5)
+            expires_at=timezone.now()+timedelta(minutes=5)
 
         )
 
-        send_mail(
+        success,msg=send_email(
+
+            recipient=email,
 
             subject="Medical Shop ERP Installation OTP",
 
@@ -161,14 +158,12 @@ Your OTP is
 
 Valid for 5 minutes.
 
-""",
-
-            from_email=settings.DEFAULT_FROM_EMAIL,
-
-            recipient_list=[email],
-
-            fail_silently=False,
+"""
 
         )
+
+        if not success:
+
+            raise Exception(msg)
 
         return True
